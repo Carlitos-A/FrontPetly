@@ -23,6 +23,32 @@ El proyecto sigue una arquitectura modular basada en **features**, separando res
 
 Se incluyó un ejemplo de uso en el primer commit para determinar y enseñar la manera en la que esta tipologia de arquitectura será usada
 
+Para la creacion de carpetas:
+
+>> mkdir -p src/features/map/components
+>> mkdir -p src/features/map/hooks
+>> mkdir -p src/features/map/services
+
+>> mkdir -p src/features/report/components
+>> mkdir -p src/features/report/hooks
+>> mkdir -p src/features/report/services
+>> mkdir -p src/features/report/model
+
+>> mkdir -p src/features/auth/components
+>> mkdir -p src/features/auth/hooks
+>> mkdir -p src/features/auth/services
+>> 
+>> mkdir -p src/shared/components
+>> mkdir -p src/shared/hooks
+>> mkdir -p src/shared/utils
+>> mkdir -p src/shared/constants
+>> 
+>> mkdir -p src/pages
+>> mkdir -p src/assets
+
+
+
+
 ```bash
 src/
 ├── app/              # Configuración global (App, Router, Providers)
@@ -33,3 +59,5 @@ src/
 │   ├── report/       # Creación de reportes
 ├── shared/           # Componentes reutilizables
 └── main.jsx          # Entry point
+
+
