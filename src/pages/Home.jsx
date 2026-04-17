@@ -8,7 +8,7 @@ import PetGrid from "../features/incidents/components/petGrid";
 import { mockPets } from "../features/incidents/data/MockPets";
 import Filters from "../features/incidents/components/Filter";
 import { DEFAULT_PET_FILTERS } from "../features/incidents/constants/filters";
-
+import { usePets } from "../features/incidents/hooks/usePets";
 
 export default function Home() {
 
@@ -16,14 +16,13 @@ export default function Home() {
   const [filters, setFilters] = useState(DEFAULT_PET_FILTERS);
   const { submitReport } = useReport();
   const [actionType, setActionType] = useState(null);
-
+  const {pets, loading} =  usePets(filters);
   function handleSubmit(data) {
     submitReport(data);
     setModalOpen(false);
   }
 
   return (
-
 
     <div className="flex h-screen">
       {/*Este mapa esta comentado debido a que me ayuda a no usar de manera innecesaria la capacidad gratis de mapbox, pero en este caso me encantaria que este mapa abarcara la mitad de la pantalla también*/}
@@ -37,9 +36,9 @@ export default function Home() {
         {/*Este petgrid me ayuda a mostrar los animales disponibles para adopción/búsqueda. Al fin y al cabo es solo muestreo, me encantaría que ocupara solo la mitad de la pantalla*/}
 
         <PetGrid
-          pets={mockPets}
-          filters={filters}
-          onCardClick={(pet) => console.log("[Home] mascota seleccionada:", pet)}
+          pets={pets}
+          loading={loading}
+          onCardClick={(pet) => console.log("[Home] mascota seleccionada:", pet)} //Aqui deberia ir la lógica de expansión de mascota para mostrar más detalles, fotos, etc.
         />
       </section>
 

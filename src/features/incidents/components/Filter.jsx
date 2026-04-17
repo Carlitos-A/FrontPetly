@@ -10,30 +10,71 @@ export default function Filters({ value, onChange }) {
   }
 
   return (
-    <div className="flex gap-2 mb-4">
+    <div className="flex gap-2 mb-4 justify-center">
 
-      <select
-        value={value.species}
-        onChange={(e) => updateFilter("species", e.target.value)}
+      {/* Boton para resetear los filtros a su estado inicial y mostrarlos todos */}
+      <button
+        onClick={() =>
+          onChange({
+            species: null,
+            status: null,
+          })
+        }
+        className={`px-4 py-2 rounded-lg transition-colors
+    ${!value.species && !value.status
+            ? "bg-blue-500 text-white"
+            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          }`}
       >
-        {FILTER_OPTIONS.species.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+        Todos
+      </button>
 
-      <select
-        value={value.status}
-        onChange={(e) => updateFilter("status", e.target.value)}
-      >
-        {FILTER_OPTIONS.status.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+      {/* Division para mostrar los botones de filtro de especie y estado, con estilos condicionales para indicar cuál está activo */}
+
+      {/* Especie */}
+      <div className="flex flex-wrap gap-2">
+        {FILTER_OPTIONS.species.map((opt) => {
+          const isActive = value.species === opt.value;
+
+          return (
+            <button
+              key={opt.value}
+              onClick={() => updateFilter("species", opt.value)}
+              className={`px-4 py-2 rounded-lg transition-colors
+                ${isActive
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
+
+
+      {/* Estado   */}
+      <div className="flex flex-wrap gap-2">
+        {FILTER_OPTIONS.status.map((opt) => {
+          const isActive = value.status === opt.value;
+
+          return (
+            <button
+              key={opt.value}
+              onClick={() => updateFilter("status", opt.value)}
+              className={`px-4 py-2 rounded-lg transition-colors
+                ${isActive
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
 
     </div>
+
   );
 }
