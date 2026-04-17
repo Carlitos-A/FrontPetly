@@ -22,9 +22,10 @@ function Map() {
     return (
         <>
             <div
-                ref={mapContainerRef} 
-                className='w-full h-screen'
-                />
+                ref={mapContainerRef}
+                className='w-full h-full border-b border-stone-200'
+                aria-label="Mapa de mascotas perdidas"
+            />
         </>
     )
 }
