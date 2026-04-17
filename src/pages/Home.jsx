@@ -5,10 +5,10 @@ import FloatingButton from "../shared/components/FloatingButton";
 import { useReport } from "../features/report/hooks/useReport";
 import Map from "../features/map/components/MapBox";
 import PetGrid from "../features/incidents/components/petGrid";
-import { mockPets } from "../features/incidents/data/MockPets";
 import Filters from "../features/incidents/components/Filter";
 import { DEFAULT_PET_FILTERS } from "../features/incidents/constants/filters";
 import { usePets } from "../features/incidents/hooks/usePets";
+import SearchBar from "../features/incidents/components/SearchBar";
 
 export default function Home() {
 
@@ -16,7 +16,7 @@ export default function Home() {
   const [filters, setFilters] = useState(DEFAULT_PET_FILTERS);
   const { submitReport } = useReport();
   const [actionType, setActionType] = useState(null);
-  const {pets, loading} =  usePets(filters);
+  const { pets, loading } = usePets(filters);
   function handleSubmit(data) {
     submitReport(data);
     setModalOpen(false);
@@ -24,13 +24,20 @@ export default function Home() {
 
   return (
 
-    <div className="flex h-screen">
+    <div className="flex flex-col md:flex-row h-screen">
       {/*Este mapa esta comentado debido a que me ayuda a no usar de manera innecesaria la capacidad gratis de mapbox, pero en este caso me encantaria que este mapa abarcara la mitad de la pantalla también*/}
-      {/* <div className="w-1/2 h-full">
+      {/* <div className="w-full md:w-1/2 h-full">
         <Map />
-      </div>  */}
+      </div> */}
 
-      <section className="w-1/2 h-full min-h-0 overflow-y-auto p-4 bg-black/60 backdrop-blur-sm">
+      <section className="w-full md:w-1/2 h-full min-h-0 overflow-y-auto p-4 bg-black/30 backdrop-blur-sm">
+
+
+        <SearchBar
+          value={filters.search}
+          onChange={(val) => setFilters({ ...filters, search: val })}
+        />
+
         {/* Este es el filtro que realiza el puente entre el front y la lógica del backend, al cambiar el filtro se actualizan los incidentes mostrados en el petgrid, lo ideal es que este filtro se mantuviera fijo en la parte superior de la pantalla mientras se hace scroll por los incidentes. */}
         <Filters value={filters} onChange={setFilters} />
         {/*Este petgrid me ayuda a mostrar los animales disponibles para adopción/búsqueda. Al fin y al cabo es solo muestreo, me encantaría que ocupara solo la mitad de la pantalla*/}

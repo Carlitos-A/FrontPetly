@@ -6,6 +6,7 @@ function buildQuery(filters) {
 
     if (filters.species) query.append("species", filters.species);
     if (filters.status) query.append("status", filters.status);
+    if (filters.search) query.append("search", filters.search);
 
     return query.toString();
 }
@@ -21,6 +22,7 @@ function filterPets(pets, filters) {
     return pets.filter(p => {
         if (filters.species && p.species !== filters.species) return false;
         if (filters.status && p.status !== filters.status) return false;
+        if (filters.search && !p.name.toLowerCase().includes(filters.search.toLowerCase())) return false;
         return true;
     });
 }
