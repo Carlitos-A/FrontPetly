@@ -10,22 +10,41 @@ export default function FloatingButton({ onAction }) {
       <div className="flex flex-col items-center gap-2">
 
         {/* Botones desplegables */}
-        <div
-          className={`flex flex-row items-center gap-2 transition-all duration-300 ${isOpen ? "opacity-100 translate-y-0 translate-x-0" : "opacity-0 translate-y-10 translate-x-0 pointer-events-none"
-            }`}
-        >
-          <button
-            type="button"
-            onClick={() => onAction("Encontrado")}
-            className="h-12 w-12 rounded-full cursor-pointer bg-blue-500 text-white shadow hover:bg-blue-700">
-            !
-          </button>
-          <button
-            type="button"
-            onClick={() => onAction("Perdido")}
-            className="h-12 w-12 rounded-full cursor-pointer bg-red-500 text-white shadow hover:bg-red-700">
-            ?
-          </button>
+        <div className={`flex flex-row items-center gap-2 transition-all duration-300 ${isOpen ? "opacity-100 translate-y-0 -translate-x-1" : "opacity-0 translate-y-10 -translate-x-1 pointer-events-none"
+          }`}>
+
+          {/* Encontrado */}
+          <div className="flex flex-col items-center gap-1">
+            <button
+              type="button"
+             onClick={() =>{ onAction("Encontrado"); setIsOpen(false); }}
+              className="h-12 w-12 rounded-full cursor-pointer bg-blue-500 text-white shadow hover:bg-blue-700 flex items-center justify-center">
+              {/* Check */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </button>
+            <span className="text-xs font-medium text-black drop-shadow">Encontrado</span>
+
+          </div>
+
+          {/* Perdido */}
+          <div className="flex flex-col items-center gap-1">
+            <button
+              type="button"
+              onClick={() =>{ onAction("Perdido"); setIsOpen(false); }}
+              className="h-12 w-12 rounded-full cursor-pointer bg-red-500 text-white shadow hover:bg-red-700 flex items-center justify-center">
+              {/* Huella*/}
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <ellipse cx="9" cy="4.5" rx="1.8" ry="2.3" />
+                <ellipse cx="15" cy="4.5" rx="1.8" ry="2.3" />
+                <ellipse cx="5.5" cy="9" rx="1.6" ry="2" />
+                <ellipse cx="18.5" cy="9" rx="1.6" ry="2" />
+                <path d="M12 10c-3.5 0-6 2-6 5.5 0 2 1.5 3.5 3 3.5.8 0 1.5-.3 2-.6.3-.2.7-.2 1 0 .5.3 1.2.6 2 .6 1.5 0 3-1.5 3-3.5C17 12 14.5 10 12 10z" />
+              </svg>
+            </button>
+            <span className="text-xs font-medium text-black drop-shadow">Perdido</span>
+          </div>
         </div>
 
         {/* Entra el boton principal */}
@@ -34,23 +53,23 @@ export default function FloatingButton({ onAction }) {
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
           className={`flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 transition-all
-        ${isOpen ? "bg-slate-200" : "bg-white hover:bg-slate-200"}`}
+        ${isOpen ? "bg-slate-200" : "bg-slate-50 hover:bg-slate-200"}`}
         >
           <div className="space-y-2">
 
             <span
               className={`block h-1 w-10 origin-center rounded-full transition-all
-            ${isOpen ? "bg-red-500 translate-y-1.5 rotate-90" : "bg-slate-500"}`}
+            ${isOpen ? "bg-slate-500" : "bg-red-500 translate-y-1.5 rotate-90"}`}
             />
 
             <span
               className={`block h-1 w-8 origin-center rounded-full transition-all
-            ${isOpen ? "bg-red-500 w-10 -translate-y-1.5 -rotate-180" : "bg-orange-500"}`}
+            ${isOpen ? "bg-orange-500" : "bg-red-500 w-10 -translate-y-1.5 -rotate-180"}`}
             />
           </div>
         </button>
       </div >
-    </div>
+    </div >
   );
 }
 

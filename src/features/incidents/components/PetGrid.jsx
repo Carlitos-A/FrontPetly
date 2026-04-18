@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import PetCard from "./PetCard";
 
 
