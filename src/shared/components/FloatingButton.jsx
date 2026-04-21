@@ -18,7 +18,7 @@ export default function FloatingButton({ onAction }) {
             <button
               type="button"
               onClick={() => { onAction("Encontrado"); setIsOpen(false); }}
-              className="h-12 w-12 rounded-full cursor-pointer bg-blue-500 text-white shadow hover:bg-blue-700 flex items-center justify-center">
+              className="h-12 w-12 rounded-full cursor-pointer bg-[#5DCAA5] text-[#0a1a10] shadow-lg shadow-[#5DCAA5]/20 hover:bg-[#4db896] hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center">
               {/* Check */}
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -33,7 +33,7 @@ export default function FloatingButton({ onAction }) {
             <button
               type="button"
               onClick={() => { onAction("Perdido"); setIsOpen(false); }}
-              className="h-12 w-12 rounded-full cursor-pointer bg-red-500 text-white shadow hover:bg-red-700 flex items-center justify-center">
+              className="h-12 w-12 rounded-full cursor-pointer bg-white/5 text-white border border-[#5DCAA5]/30 shadow-lg hover:bg-white/10 hover:border-[#5DCAA5]/60 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center">
               {/* Huella*/}
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                 <ellipse cx="9" cy="4.5" rx="1.8" ry="2.3" />
@@ -43,7 +43,7 @@ export default function FloatingButton({ onAction }) {
                 <path d="M12 10c-3.5 0-6 2-6 5.5 0 2 1.5 3.5 3 3.5.8 0 1.5-.3 2-.6.3-.2.7-.2 1 0 .5.3 1.2.6 2 .6 1.5 0 3-1.5 3-3.5C17 12 14.5 10 12 10z" />
               </svg>
             </button>
-            <span className="text-xs font-medium text-black drop-shadow">Perdido</span>
+            <span className="text-xs font-medium text-white drop-shadow">Perdido</span>
           </div>
         </div>
 
@@ -52,19 +52,19 @@ export default function FloatingButton({ onAction }) {
           // Al darle click se cambia el estado de isOpen, lo que hace que el botón principal cambie su apariencia y los botones secundarios se desplieguen o se oculten según el valor de isOpen.
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className={`flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 transition-all
-        ${isOpen ? "bg-black/50" : "bg-black/30 backdrop-blur hover:bg-black/50"}`}
+          className={`flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 transition-all duration-300
+        ${isOpen ? "bg-[#5DCAA5] text-[#0a1a10] shadow-lg shadow-[#5DCAA5]/30" : "bg-white/80 text-white border border-[#5DCAA5]/30 shadow-lg hover:bg-white/90 hover:border-[#5DCAA5]/60"}`}
         >
           <div className="space-y-2">
 
             <span
               className={`block h-1 w-10 origin-center rounded-full transition-all
-            ${isOpen ? "bg-orange-500" : "bg-yellow-500 translate-y-1.5 rotate-90"}`}
+            ${isOpen ? "bg-[#0a1a10]" : "bg-[#5DCAA5] translate-y-1.5 rotate-90"}`}
             />
 
             <span
               className={`block h-1 w-8 origin-center rounded-full transition-all
-            ${isOpen ? "bg-white" : "bg-yellow-500 w-10 -translate-y-1.5 -rotate-180"}`}
+            ${isOpen ? "bg-[#0a1a10]" : "bg-[#5DCAA5] w-10 -translate-y-1.5 -rotate-180"}`}
             />
           </div>
         </button>

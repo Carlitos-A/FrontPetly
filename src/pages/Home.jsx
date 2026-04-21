@@ -24,13 +24,13 @@ export default function Home() {
 
   return (
 
-    <div className="flex flex-col md:flex-row h-screen">
+    <div className="flex flex-col md:flex-row h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
       {/*Este mapa esta comentado debido a que me ayuda a no usar de manera innecesaria la capacidad gratis de mapbox, pero en este caso me encantaria que este mapa abarcara la mitad de la pantalla también*/}
-      {/* <div className="w-full md:w-1/2 h-full">
+      <div className="w-full md:w-1/2 h-full">
         <Map />
-      </div> */}
+      </div>
 
-      <section className="w-full md:w-1/2 h-full min-h-0 overflow-hidden p-4 bg-black/30 backdrop-blur-sm pt-20">
+      <section className=" w-full md:w-1/2 h-full min-h-0 overflow-hidden p-4 pt-20 bg-white/5 backdrop-blur-xl border-l border-white/10">
 
 
         <SearchBar
