@@ -30,7 +30,7 @@ export default function Home() {
         <Map />
       </div> */}
 
-      <section className="w-full md:w-1/2 h-full min-h-0 overflow-y-auto p-4 bg-black/30 backdrop-blur-sm">
+      <section className="w-full md:w-1/2 h-full min-h-0 overflow-hidden p-4 bg-black/30 backdrop-blur-sm pt-20">
 
 
         <SearchBar
