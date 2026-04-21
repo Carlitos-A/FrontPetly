@@ -24,17 +24,17 @@ export default function Header() {
                 {/* CENTRO → Menú */}
                 <ul className="hidden md:flex justify-center gap-8 text-white">
                     <li>
-                        <a className="hover:text-blue-400 transition-colors" href="#">
+                        <a className="hover:text-[#5DCAA5] transition-colors" href="#">
                             Home
                         </a>
                     </li>
                     <li>
-                        <a className="hover:text-blue-400 transition-colors" href="#">
+                        <a className="hover:text-[#5DCAA5] transition-colors" href="#">
                             Servicios
                         </a>
                     </li>
                     <li>
-                        <a className="hover:text-blue-400 transition-colors" href="#">
+                        <a className="hover:text-[#5DCAA5] transition-colors" href="#">
                             Contacto
                         </a>
                     </li>
@@ -42,14 +42,15 @@ export default function Header() {
 
                 {/* DERECHA → Botón */}
                 <div className="flex justify-end">
-                    <button
+                    <a
                         className="text-white bg-white/10 backdrop-blur px-3 py-2 rounded-lg 
-                       border border-white/20 shadow-sm
-                       transition-all duration-200 ease-out
-                       hover:bg-white/20 hover:scale-105 active:scale-95 hover:cursor-pointer"
+                        border border-white/20 shadow-sm
+                        transition-all duration-200 ease-out
+                        hover:bg-white/20 hover:scale-105 active:scale-95 hover:cursor-pointer hover:text-[#5DCAA5]"
+                        href="/register"
                     >
                         Get started
-                    </button>
+                    </a>
                 </div>
 
             </div>

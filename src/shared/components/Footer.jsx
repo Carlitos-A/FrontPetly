@@ -2,8 +2,8 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="bg-black/30 backdrop-blur border-t border-white/10 px-1">
-      <div className="max-w-7xl mx-auto pt-0 pb-1 flex flex-col sm:flex-row justify-between items-center gap-6 text-sm text-white/60">
+    <footer className="  fixed bottom-0 left-0 w-full z-50 bg-black/40 backdrop-blur border-t border-white/10">
+      <div className="max-w-7xl mx-auto pt-1 pb-1 flex flex-col sm:flex-row justify-between items-center gap-6 text-sm text-white/60 ">
 
         {/* Izquierda */}
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
@@ -19,7 +19,7 @@ export default function Footer() {
 
         {/* Derecha (iconos) */}
         <div className="flex items-center gap-6 text-white/50">
-          
+
           {/* GitHub */}
           <a
             href="https://github.com/Carlitos-A"
@@ -44,18 +44,6 @@ export default function Footer() {
             </svg>
           </a>
 
-          {/* Discord */}
-          <a
-            href="#"
-            className="hover:text-white transition-colors"
-          >
-            <span className="sr-only">Discord</span>
-            <svg width="24" height="24" fill="currentColor">
-              <path d="M9.5 10.5c-.7 0-1.3.6-1.3 1.3 0 .7.6 1.3 1.3 1.3.7 0 1.3-.6 1.3-1.3 0-.7-.6-1.3-1.3-1.3Z" />
-              <path d="M14.5 10.5c-.7 0-1.3.6-1.3 1.3 0 .7.6 1.3 1.3 1.3.7 0 1.3-.6 1.3-1.3 0-.7-.6-1.3-1.3-1.3Z" />
-              <path d="M20 0H4C1.8 0 0 1.8 0 4v14c0 2.2 1.8 4 4 4h13l-1-3 2 1.5 2 1.5V4c0-2.2-1.8-4-4-4Z" />
-            </svg>
-          </a>
 
         </div>
       </div>
