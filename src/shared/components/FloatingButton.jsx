@@ -7,7 +7,7 @@ export default function FloatingButton({ onAction }) {
   return (
 
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-center gap-2 pb-4">
 
         {/* Botones desplegables */}
         <div className={`flex flex-row items-center gap-2 transition-all duration-300 ${isOpen ? "opacity-100 translate-y-0 -translate-x-1" : "opacity-0 translate-y-10 -translate-x-1 pointer-events-none"
@@ -17,7 +17,7 @@ export default function FloatingButton({ onAction }) {
           <div className="flex flex-col items-center gap-1">
             <button
               type="button"
-             onClick={() =>{ onAction("Encontrado"); setIsOpen(false); }}
+              onClick={() => { onAction("Encontrado"); setIsOpen(false); }}
               className="h-12 w-12 rounded-full cursor-pointer bg-blue-500 text-white shadow hover:bg-blue-700 flex items-center justify-center">
               {/* Check */}
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -32,7 +32,7 @@ export default function FloatingButton({ onAction }) {
           <div className="flex flex-col items-center gap-1">
             <button
               type="button"
-              onClick={() =>{ onAction("Perdido"); setIsOpen(false); }}
+              onClick={() => { onAction("Perdido"); setIsOpen(false); }}
               className="h-12 w-12 rounded-full cursor-pointer bg-red-500 text-white shadow hover:bg-red-700 flex items-center justify-center">
               {/* Huella*/}
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -53,18 +53,18 @@ export default function FloatingButton({ onAction }) {
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
           className={`flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl p-2 transition-all
-        ${isOpen ? "bg-slate-200" : "bg-slate-50 hover:bg-slate-200"}`}
+        ${isOpen ? "bg-black/50" : "bg-black/30 backdrop-blur hover:bg-black/50"}`}
         >
           <div className="space-y-2">
 
             <span
               className={`block h-1 w-10 origin-center rounded-full transition-all
-            ${isOpen ? "bg-slate-500" : "bg-red-500 translate-y-1.5 rotate-90"}`}
+            ${isOpen ? "bg-orange-500" : "bg-yellow-500 translate-y-1.5 rotate-90"}`}
             />
 
             <span
               className={`block h-1 w-8 origin-center rounded-full transition-all
-            ${isOpen ? "bg-orange-500" : "bg-red-500 w-10 -translate-y-1.5 -rotate-180"}`}
+            ${isOpen ? "bg-white" : "bg-yellow-500 w-10 -translate-y-1.5 -rotate-180"}`}
             />
           </div>
         </button>
