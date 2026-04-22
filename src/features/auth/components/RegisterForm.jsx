@@ -1,6 +1,7 @@
 import { useRegisterForm } from "../hooks/useRegisterForm";
 import Field from "../../../shared/components/Field";
 
+
 export default function RegisterForm() {
     const {
         formData,
@@ -8,27 +9,10 @@ export default function RegisterForm() {
         handleSubmit,
         showPassword,
         togglePassword,
-        hasPet,
-        setHasPet,
         loading,
+        error,
     } = useRegisterForm();
 
-    const petOptions = [
-        { value: "si", label: "Sí, tengo" },
-        { value: "no", label: "No tengo" },
-    ];
-
-    const cities = [
-        "Santiago",
-        "Valparaíso",
-        "Concepción",
-        "La Serena",
-        "Antofagasta",
-        "Temuco",
-        "Rancagua",
-        "Talca",
-        "Arica",
-    ];
 
     return (
         <div className="flex h-screen overflow-hidden font-['DM_Sans',sans-serif]">
@@ -47,50 +31,93 @@ export default function RegisterForm() {
                 </h2>
                 <p className="text-white/60 text-sm mb-8">Únete a nuestra comunidad</p>
 
+                {error && (
+                    <div className="mb-6 p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-300 text-sm">
+                        {error}
+                    </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
                     {/* Nombre + Teléfono */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Field label="Nombre">
+
+                        {/* Nombre ocupa toda la fila */}
+                        <div className="sm:col-span-2">
+                            <Field label="Nombre">
+                                <input
+                                    name="nombre"
+                                    placeholder="Nombre"
+                                    value={formData.nombre}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Field>
+                        </div>
+
+                        {/* Apellido Paterno */}
+                        <Field label="Apellido Paterno">
                             <input
-                                name="nombre"
-                                placeholder="Tu nombre completo"
-                                value={formData.nombre}
+                                name="apellido_paterno"
+                                placeholder="Apellido paterno"
+                                value={formData.apellido_paterno}
                                 onChange={handleChange}
                                 required
                             />
                         </Field>
 
-                        <Field label="Teléfono">
+                        {/* Apellido Materno */}
+                        <Field label="Apellido Materno">
                             <input
-                                name="telefono"
-                                placeholder="+56 9 1234 5678"
-                                value={formData.telefono}
+                                name="apellido_materno"
+                                placeholder="Apellido materno"
+                                value={formData.apellido_materno}
                                 onChange={handleChange}
                             />
                         </Field>
+
                     </div>
 
-                    {/* Email */}
-                    <Field label="Email">
+                    {/* Teléfono */}
+                    <Field label="Teléfono">
+                        <input
+                            name="telefono"
+                            placeholder="912345678"
+                            value={formData.telefono}
+                            onChange={handleChange}
+                        />
+                    </Field>
+
+                    {/* Dirección */}
+                    <Field label="Dirección">
+                        <input
+                            name="direccion"
+                            placeholder="Calle 123, comuna"
+                            value={formData.direccion}
+                            onChange={handleChange}
+                        />
+                    </Field>
+
+                    {/* Correo */}
+                    <Field label="Correo">
                         <input
                             type="email"
-                            name="email"
+                            name="correo"
                             placeholder="tu@email.com"
-                            value={formData.email}
+                            value={formData.correo}
                             onChange={handleChange}
                             required
                         />
                     </Field>
 
-                    {/* Password */}
+                    {/* Contraseña */}
                     <Field label="Contraseña">
                         <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
-                                name="password"
+                                name="contrasena"
                                 placeholder="Mínimo 8 caracteres"
-                                value={formData.password}
+                                value={formData.contrasena}
                                 onChange={handleChange}
                                 required
                             />
@@ -98,61 +125,44 @@ export default function RegisterForm() {
                             <button
                                 type="button"
                                 onClick={togglePassword}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50 hover:text-white/80 transition-colors"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/50 hover:text-white/80"
                             >
                                 {showPassword ? "Ocultar" : "Ver"}
                             </button>
                         </div>
                     </Field>
 
-                    {/* Ciudad */}
-                    <Field label="Ciudad">
-                        <select
-                            name="ciudad"
-                            value={formData.ciudad}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="" disabled>
-                                Selecciona tu ciudad
-                            </option>
+                    {/* RUN */}
+                    <Field label="RUN">
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="text"
+                                name="run"
+                                placeholder="12345678"
+                                value={formData.run}
+                                onChange={handleChange}
+                                required
+                            />
 
-                            {cities.map((c) => (
-                                <option key={c} value={c}>
-                                    {c}
-                                </option>
-                            ))}
-                        </select>
-                    </Field>
+                            <span className="text-white/50 font-medium">-</span>
 
-                    {/* HasPet */}
-                    <div className="flex flex-col gap-3">
-                        <span className="text-[11px] text-white/40 uppercase tracking-wide font-semibold">
-                            ¿Tienes mascota?
-                        </span>
-
-                        <div className="flex gap-3">
-                            {petOptions.map((opt) => (
-                                <button
-                                    key={opt.value}
-                                    type="button"
-                                    onClick={() => setHasPet(opt.value)}
-                                    className={`flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 border ${hasPet === opt.value
-                                        ? "bg-[#5dCAA5] text-[#0a1a10] border-[#5dCAA5]"
-                                        : "bg-white/6 text-white border-white/12 hover:border-white/25 hover:bg-white/10"
-                                        }`}
-                                >
-                                    {opt.label}
-                                </button>
-                            ))}
+                            <input
+                                type="text"
+                                name="dv"
+                                placeholder="9"
+                                value={formData.dv || ""}
+                                onChange={handleChange}
+                                maxLength={1}
+                                required
+                            />
                         </div>
-                    </div>
+                    </Field>
 
                     {/* Submit */}
                     <button
                         type="submit"
                         disabled={loading}
-                        className="mt-4 py-3 px-4 rounded-lg bg-gradient-to-r from-[#5dCAA5] to-[#4db896] text-[#0a1a10] font-semibold text-sm hover:shadow-lg hover:shadow-[#5dCAA5]/25 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="mt-4 py-3 px-4 rounded-lg bg-linear-to-r from-[#5dCAA5] to-[#4db896] text-[#0a1a10] font-semibold text-sm hover:shadow-lg hover:shadow-[#5dCAA5]/25 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed hover:cursor-pointer"
                     >
                         {loading ? "Creando..." : "Crear cuenta"}
                     </button>
