@@ -3,7 +3,7 @@ import React from "react";
 export default function Field({ label, children }) {
     return (
         <div className="flex flex-col gap-2">
-            <label className="text-[11px] text-white/40 uppercase tracking-wide font-semibold">
+            <label className="text-[11px] text-white uppercase tracking-wide font-bold">
                 {label}
             </label>
             <div

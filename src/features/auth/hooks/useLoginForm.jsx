@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/loginService";
+import { useAuth } from "../components/AuthContext";
 
 export function useLoginForm() {
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const [formData, setFormData] = useState({
         correo: "",
@@ -36,20 +38,13 @@ export function useLoginForm() {
         try {
             const response = await loginUser(formData);
 
-            const token = response.data.token;
+            const { token, ...userData } = response.data;
 
             if (!token) {
                 throw new Error("Token no recibido");
-
             }
 
-
-            localStorage.setItem("token", token);
-
-            if (response.usuario) {
-                localStorage.setItem("usuario", JSON.stringify(response.usuario));
-            }
-
+            login(userData, token);
 
             navigate("/");
 

@@ -13,10 +13,10 @@ export default function LoginForm() {
     } = useLoginForm();
 
     return (
-        <div className="flex min-h-screen font-['DM_Sans',sans-serif]">
+        <div className="flex h-screen overflow-hidden font-['DM_Sans',sans-serif]">
 
             {/* PANEL IZQUIERDO (FORMULARIO) */}
-            <div className="w-full pb-70 md:w-[55%] flex flex-col justify-center px-6 md:px-16 py-10 bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] backdrop-blur-xl overflow-y-auto">
+            <div className="w-full pb-20 md:w-[55%] flex flex-col justify-center px-6 md:px-40 py-10 bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] backdrop-blur-xl overflow-y-auto">
 
                 <h2 className="text-[2rem] font-bold text-white mb-1">
                     Iniciar sesión

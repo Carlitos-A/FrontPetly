@@ -15,7 +15,7 @@ export default function RegisterForm() {
 
 
     return (
-        <div className="flex h-screen overflow-hidden font-['DM_Sans',sans-serif]">
+        <div className="flex min-h-screen overflow-hidden font-['DM_Sans',sans-serif]">
 
             {/* PANEL IZQUIERDO */}
             <div className="hidden md:flex md:w-[45%] flex-col justify-between p-10 relative overflow-hidden bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
@@ -24,15 +24,15 @@ export default function RegisterForm() {
             </div>
 
             {/* PANEL DERECHO */}
-            <div className="w-full md:w-[55%] flex flex-col justify-center px-6 md:px-16 py-10 bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] backdrop-blur-xl overflow-y-auto">
+            <div className="w-full md:w-[55%] flex flex-col justify-start md:pt-25 px-6 md:px-16 py-10 bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] backdrop-blur-xl">
 
-                <h2 className="text-[2rem] font-bold text-white mb-1">
+                <h2 className="text-[2rem] font-bold text-white mb-0">
                     Crear cuenta
                 </h2>
-                <p className="text-white/60 text-sm mb-8">Únete a nuestra comunidad</p>
+                <p className="text-white/60 text-sm mb-3">Únete a nuestra comunidad</p>
 
                 {error && (
-                    <div className="mb-6 p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-300 text-sm">
+                    <div className="mb-3 p-2 rounded-lg bg-red-500/20 border border-red-500/50 text-red-300 text-sm">
                         {error}
                     </div>
                 )}
