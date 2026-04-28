@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../features/auth/components/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function Header() {
     const { user, logout } = useAuth();
@@ -84,7 +85,7 @@ export default function Header() {
                                     onClick={() => setOpen(!open)}
                                     className="flex items-center gap-2 text-white bg-white/10 px-3 py-2 rounded-lg border border-white/20 
                hover:bg-white/20 transition-all duration-200
-               focus:outline-none focus:ring-2 focus:ring-[#5DCAA5]/50"
+               focus:outline-none focus:ring-2 focus:ring-[#5DCAA5]/50 cursor-pointer"
                                 >
                                     <span className="text-sm font-medium">
                                         {user.nombre}
@@ -102,7 +103,7 @@ export default function Header() {
                                     className={`absolute right-0 mt-2 w-52 rounded-xl border border-white/10 shadow-xl z-50
                 bg-black/60 backdrop-blur-lg
                 transition-all duration-200 origin-top-right
-                ${open ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}
+                ${open ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none "}`}
                                 >
 
                                     {/* Header */}
@@ -118,22 +119,28 @@ export default function Header() {
                                     {/* Links */}
                                     <ul className="p-2 text-sm text-white">
                                         <li>
-                                            <a className="flex items-center px-3 py-2 rounded-lg hover:bg-white/10 transition">
-                                                Dashboard
-                                            </a>
+                                            <Link
+                                                to="/agregar-mascota"
+                                                className="flex items-center px-3 py-2 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                                            >
+                                                Agregar mascota
+                                            </Link>
                                         </li>
 
                                         <li>
-                                            <a className="flex items-center px-3 py-2 rounded-lg hover:bg-white/10 transition">
+                                            <Link
+                                                to="/perfil"
+                                                className="flex items-center px-3 py-2 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                                            >
                                                 Perfil
-                                            </a>
+                                            </Link>
                                         </li>
 
                                         <li className="mt-1 border-t border-white/10 pt-1">
                                             <button
                                                 onClick={logout}
                                                 className="w-full text-left px-3 py-2 rounded-lg text-red-300 
-                     hover:bg-red-500/20 transition"
+                     hover:bg-red-500/20 transition cursor-pointer"
                                             >
                                                 Cerrar sesión
                                             </button>
@@ -149,16 +156,20 @@ export default function Header() {
             {mobileMenuOpen && (
                 <div className="md:hidden bg-black/1 backdrop-blur border-t border-white/10 px-4 py-4 flex flex-col gap-4 ">
                     <ul className="flex flex-col gap-2 text-white text-sm">
-                        <li><a className="block py-2 hover:text-[#5DCAA5]" href="#">Home</a></li>
-                        <li><a className="block py-2 hover:text-[#5DCAA5]" href="#">Servicios</a></li>
-                        <li><a className="block py-2 hover:text-[#5DCAA5]" href="#">Contacto</a></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/">Home</Link></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/servicios">Servicios</Link></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/contacto">Contacto</Link></li>
                     </ul>
 
                     <div className="border-t border-white/10 pt-3">
                         {!user ? (
                             <div className="flex flex-col gap-2">
-                                <a className="text-center text-white bg-white/10 px-3 py-2 rounded-lg border border-white/20 hover:bg-white/20" href="/register">Registrarse</a>
-                                <a className="text-center text-white bg-white/10 px-3 py-2 rounded-lg border border-white/20 hover:bg-white/20" href="/login">Iniciar Sesión</a>
+                                <Link className="text-center text-white bg-white/10 px-3 py-2 rounded-lg border border-white/20 hover:bg-white/20" to="/register">
+                                    Registrarse
+                                </Link>
+                                <Link className="text-center text-white bg-white/10 px-3 py-2 rounded-lg border border-white/20 hover:bg-white/20" to="/login">
+                                    Iniciar Sesión
+                                </Link>
                             </div>
                         ) : (
                             <div className="flex flex-col gap-2 text-sm text-white">
@@ -169,9 +180,15 @@ export default function Header() {
                                         <p className="text-white/50 text-xs">{user.correo}</p>
                                     </div>
                                 </div>
-                                <a className="py-2 hover:text-[#5DCAA5]">Dashboard</a>
-                                <a className="py-2 hover:text-[#5DCAA5]">Perfil</a>
-                                <button onClick={logout} className="text-left py-2 text-red-300 hover:text-red-400">Cerrar sesión</button>
+                                <Link className="py-2 hover:text-[#5DCAA5]" to="/dashboard">
+                                    Dashboard
+                                </Link>
+                                <Link className="py-2 hover:text-[#5DCAA5]" to="/perfil">
+                                    Perfil
+                                </Link>
+                                <button onClick={logout} className="text-left py-2 text-red-300 hover:text-red-400">
+                                    Cerrar sesión
+                                </button>
                             </div>
                         )}
                     </div>
