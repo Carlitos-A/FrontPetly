@@ -1,11 +1,9 @@
-export async function registerUser(data) {
+export async function loginUser(data) {
     try {
-
-        const response = await fetch("http://localhost:8080/petly/usuarios/registrar", {
+        const response = await fetch("http://localhost:8080/petly/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-
             },
             body: JSON.stringify(data),
         });
@@ -19,16 +17,17 @@ export async function registerUser(data) {
 
         return {
             success: true,
-            data: result,
+            data: result, // aquí debería venir el token
         };
 
     } catch (error) {
 
         if (error.message === "Failed to fetch") {
-            console.error("Microservicio caído, ruta mal puesto o bloqueo de CORS:");
+            console.error("Microservicio caído, ruta mal puesta o CORS:");
         } else {
-            console.error("Error al registrar usuario:", error);
+            console.error("Error al iniciar sesión:", error);
         }
+
         return {
             success: false,
             error: error.message,
