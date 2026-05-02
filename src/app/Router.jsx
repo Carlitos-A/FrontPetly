@@ -3,6 +3,7 @@ import Layout from "../app/Layout";
 import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
+import PetRegistrationPage from "../pages/PetRegistrationPage";
 
 export default function AppRouter() {
     return (
@@ -12,6 +13,7 @@ export default function AppRouter() {
                     <Route path="/" element={<Home/>} />
                     <Route path="/register" element={<Register/>} />
                     <Route path="/login" element={<Login/>} />
+                    <Route path="/agregar-mascota" element={<PetRegistrationPage/>} />
                 </Route>
             </Routes>
         </BrowserRouter>
