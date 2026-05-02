@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { registerService } from "../services/registerService";
-import { data } from "autoprefixer";
 
 
 export function usePetRegistration() {
@@ -11,6 +10,7 @@ export function usePetRegistration() {
     type: "",
     color: "",
     breed: "",
+    age:"",
     description: "",
     otherPetType: "",
     photo: null,
@@ -58,6 +58,7 @@ export function usePetRegistration() {
       chip: "",
       name: "",
       gender: "",
+      age:"",
       type: "",
       color: "",
       breed: "",

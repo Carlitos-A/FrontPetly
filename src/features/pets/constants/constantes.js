@@ -1,7 +1,7 @@
 export const PET_TYPES = [
-  { id: "dog", emoji: "🐕", label: "Perro" },
-  { id: "cat", emoji: "🐈", label: "Gato" },
-  { id: "other", emoji: "🐾", label: "Otro" },
+  { id: "dog",  label: "Perro" },
+  { id: "cat",  label: "Gato" },
+  { id: "other", label: "Otro" },
 ];
 
 export const SIZES = ["Pequeño", "Mediano", "Grande", "Gigante"];

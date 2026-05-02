@@ -8,6 +8,7 @@ export async function registerService(Data) {
             chip: Data.chip,
             name: Data.name,
             gender: Data.gender,
+            age: Data.age,
             type: Data.type,
             color: Data.color,
             breed: Data.breed,
