@@ -16,14 +16,15 @@ export default function Filters({ value, onChange }) {
       <button
         onClick={() =>
           onChange({
-            species: null,
-            status: null,
+            ...value,
+            tipo_reporte: null,
+            estado: null,
           })
         }
         className={`
       px-5 py-2.5 rounded-lg text-sm font-medium transition-all
       border
-      ${!value.species && !value.status
+      ${!value.tipo_reporte && !value.estado
             ? "bg-[#5DCAA5] text-[#0a1a10] border-[#5DCAA5]"
             : "bg-white/5 text-white border-white/10 hover:bg-white/10"
           }
@@ -32,38 +33,14 @@ export default function Filters({ value, onChange }) {
         Todos
       </button>
 
-      {/* Especie */}
       <div className="flex flex-wrap gap-2 justify-center">
-        {FILTER_OPTIONS.species.map((opt) => {
-          const isActive = value.species === opt.value;
+        {FILTER_OPTIONS.tipo_reporte.map((opt) => {
+          const isActive = value.tipo_reporte === opt.value;
 
           return (
             <button
               key={opt.value}
-              onClick={() => updateFilter("species", opt.value)}
-              className={`
-            px-4 py-2 rounded-lg text-sm transition-all border
-            ${isActive
-                  ? "bg-[#5DCAA5] text-[#0a1a10] border-[#5DCAA5]"
-                  : "bg-white/5 text-white border-white/10 hover:bg-white/10"
-                }
-          `}
-            >
-              {opt.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Estado */}
-      <div className="flex flex-wrap gap-2 justify-center">
-        {FILTER_OPTIONS.status.map((opt) => {
-          const isActive = value.status === opt.value;
-
-          return (
-            <button
-              key={opt.value}
-              onClick={() => updateFilter("status", opt.value)}
+              onClick={() => updateFilter("tipo_reporte", isActive ? null : opt.value)}
               className={`
             px-4 py-2 rounded-lg text-sm transition-all border
             ${isActive

@@ -9,6 +9,7 @@ import Filters from "../features/incidents/components/Filter";
 import { DEFAULT_PET_FILTERS } from "../features/incidents/constants/filters";
 import { usePets } from "../features/incidents/hooks/usePets";
 import SearchBar from "../features/incidents/components/SearchBar";
+import { useUserLocation } from "../shared/hooks/useUserLocation";
 
 export default function Home() {
 
@@ -17,6 +18,7 @@ export default function Home() {
   const { submitReport } = useReport();
   const [actionType, setActionType] = useState(null);
   const { pets, loading } = usePets(filters);
+  const { location } = useUserLocation();
   function handleSubmit(data) {
     submitReport(data);
     setModalOpen(false);
@@ -27,7 +29,7 @@ export default function Home() {
     <div className="flex flex-col md:flex-row min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
       {/*Este mapa esta comentado debido a que me ayuda a no usar de manera innecesaria la capacidad gratis de mapbox, pero en este caso me encantaria que este mapa abarcara la mitad de la pantalla también*/}
       {/* <div className="w-full md:w-1/2 md:h-[calc(100vh-3rem)] h-75 md:sticky md:top-12">
-        <Map />
+        <Map filters={filters} />
       </div> */}
 
       <section className="w-full md:w-1/2 p-4 md:pt-20 bg-white/5 backdrop-blur-xl border-l border-white/10 md:h-full md:overflow-y-auto">
@@ -45,6 +47,7 @@ export default function Home() {
         <PetGrid
           pets={pets}
           loading={loading}
+          referenceLocation={location}
           onCardClick={(pet) => console.log("[Home] mascota seleccionada:", pet)} //Aqui deberia ir la lógica de expansión de mascota para mostrar más detalles, fotos, etc.
         />
       </section>
