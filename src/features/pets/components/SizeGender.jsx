@@ -9,15 +9,16 @@ export default function SizeGender({
     back,
     error,
 }) {
-
+    const isAgeValid = /^\d+$/.test(formData.age);
     const isStep2Valid =
         formData.chip?.trim() &&
         formData.name?.trim() &&
         formData.gender &&
         formData.color?.trim() &&
         formData.breed?.trim() &&
-        formData.description?.trim()
-        formData.age?.trim();
+        formData.description?.trim() &&
+        formData.age?.toString().trim() &&
+        isAgeValid;
 
     return (
         <div className="flex flex-col h-full max-h-[calc(100vh-180px)]">
@@ -41,7 +42,7 @@ export default function SizeGender({
             <div className="grid grid-cols-2 gap-x-3 gap-y-2 flex-1 overflow-hidden content-start">
 
                 {/* Chip */}
-                <Field label="Número identificador *">
+                <Field label="Identificador (Nro. Chip / Otros) *">
                     <>
                         <input
                             type="text"
@@ -89,7 +90,7 @@ export default function SizeGender({
                 </Field>
 
                 {/* Edad */}
-                <Field label="Edad *">
+                <Field label="Edad en años *">
                     <>
                         <input
                             type="text"
@@ -98,9 +99,13 @@ export default function SizeGender({
                             value={formData.age || ""}
                             onChange={handleChange}
                         />
-                        {!formData.age?.trim() && (
+                        {!formData.age?.trim() ? (
                             <p className="text-xs text-red-400 mt-0.5">Obligatorio*</p>
-                        )}
+                        ) : !isAgeValid ? (
+                            <p className="text-xs text-red-400 mt-0.5">Solo números*</p>
+                        ):null
+
+                        }
                     </>
                 </Field>
 
@@ -129,11 +134,10 @@ export default function SizeGender({
                                     key={g}
                                     type="button"
                                     onClick={() => handleSelect("gender", g)}
-                                    className={`flex-1 py-1.5 px-2 rounded-lg font-medium text-sm transition-all duration-300 border-2 cursor-pointer ${
-                                        formData.gender === g
-                                            ? "bg-[#369467] border-[#5DCAA5] text-white shadow-lg shadow-[#369467]/50"
-                                            : "bg-white/5 border-white/20 text-gray-300 hover:border-white/40 hover:bg-white/10"
-                                    }`}
+                                    className={`flex-1 py-1.5 px-2 rounded-lg font-medium text-sm transition-all duration-300 border-2 cursor-pointer ${formData.gender === g
+                                        ? "bg-[#369467] border-[#5DCAA5] text-white shadow-lg shadow-[#369467]/50"
+                                        : "bg-white/5 border-white/20 text-gray-300 hover:border-white/40 hover:bg-white/10"
+                                        }`}
                                 >
                                     {g}
                                 </button>

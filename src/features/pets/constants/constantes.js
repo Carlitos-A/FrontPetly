@@ -4,7 +4,6 @@ export const PET_TYPES = [
   { id: "OTRO", label: "Otro" },
 ];
 
-export const SIZES = ["Pequeño", "Mediano", "Grande", "Gigante"];
 export const GENDERS = ["Macho", "Hembra"];
 
 

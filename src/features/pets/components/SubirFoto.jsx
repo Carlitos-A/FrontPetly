@@ -107,7 +107,7 @@ export default function SubirFoto({
             </div>
 
             {/* Campo "otro tipo" */}
-            {formData.type === "other" && (
+            {formData.type === "OTRO" && (
                 <div className="space-y-2 bg-white/5 border border-white/20 rounded-lg p-4">
                     <label className="block text-white font-medium text-sm">
                         ¿Qué tipo de mascota tienes?
