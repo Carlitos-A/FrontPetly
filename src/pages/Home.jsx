@@ -4,7 +4,7 @@ import ReportModal from "../features/report/components/ReportModal";
 import FloatingButton from "../shared/components/FloatingButton";
 import { useReport } from "../features/report/hooks/useReport";
 import Map from "../features/map/components/MapBox";
-import PetGrid from "../features/incidents/components/petGrid";
+import PetGrid from "../features/incidents/components/PetGrid";
 import Filters from "../features/incidents/components/Filter";
 import { DEFAULT_PET_FILTERS } from "../features/incidents/constants/filters";
 import { usePets } from "../features/incidents/hooks/usePets";
