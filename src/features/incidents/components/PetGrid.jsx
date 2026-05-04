@@ -1,7 +1,10 @@
 import PetCard from "./PetCard";
+import { comparePetsByDistance } from "../utils/distance";
 
 
-export default function PetGrid({ pets = [], onCardClick, loading }) {
+export default function PetGrid({ pets = [], onCardClick, loading, referenceLocation, selectedPetId }) {
+  const sortedPets = [...pets].sort(comparePetsByDistance(referenceLocation));
+
   if (loading) {
     return (
       <div className="py-20 text-center text-white/40">
@@ -21,8 +24,14 @@ export default function PetGrid({ pets = [], onCardClick, loading }) {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      {pets.map((pet) => (
-        <PetCard key={pet.id} pet={pet} onClick={onCardClick} />
+      {sortedPets.map((pet) => (
+        <PetCard
+          key={pet.id}
+          pet={pet}
+          onClick={onCardClick}
+          referenceLocation={referenceLocation}
+          selected={String(pet.id) === String(selectedPetId)}
+        />
       ))}
     </div>
   );

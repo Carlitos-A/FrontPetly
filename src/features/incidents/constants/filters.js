@@ -1,17 +1,12 @@
 export const DEFAULT_PET_FILTERS = {
-    species: null,
-    status: null,
+    tipo_reporte: null,
+    estado: null,
     search: "",
 };
 export const FILTER_OPTIONS = {
-    species: [
-        { value: "dog", label: "Perros" },
-        { value: "cat", label: "Gatos" },
-        { value: "others", label: "Otros" },
-
-    ],
-    status: [
-        { value: "lost", label: "Perdidos" },
-        { value: "found", label: "Encontrados" },
+    tipo_reporte: [
+        { value: "PERDIDA", label: "Perdidos" },
+        { value: "ENCONTRADA", label: "Encontrados" },
+        { value: "AVISTAMIENTO", label: "Avistados" },
     ],
 };
