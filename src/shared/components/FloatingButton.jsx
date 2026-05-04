@@ -24,7 +24,7 @@ export default function FloatingButton({ onAction }) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </button>
-            <span className="text-xs font-medium text-black drop-shadow">Encontrado</span>
+            <span className="text-xs font-medium text-white drop-shadow">Encontrado</span>
 
           </div>
 
