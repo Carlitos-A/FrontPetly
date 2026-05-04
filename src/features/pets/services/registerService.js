@@ -2,19 +2,25 @@ export async function registerService(Data) {
     try {
 
         const data = new FormData();
+        const token = localStorage.getItem("token");
 
-
-        data.append("data", JSON.stringify({
-            chip: Data.chip,
-            name: Data.name,
-            gender: Data.gender,
-            age: Data.age,
-            type: Data.type,
-            color: Data.color,
-            breed: Data.breed,
-            description: Data.description,
-            otherPetType: Data.otherPetType,
-        }));
+        data.append(
+            "data",
+            new Blob(
+                [JSON.stringify({
+                    chip: Data.chip,
+                    nombre: Data.name,
+                    sexo: Data.gender,
+                    edad: Data.age,
+                    tipo: Data.type,
+                    color: Data.color,
+                    raza: Data.breed,
+                    descripcion: Data.description,
+                    otroTipo: Data.otherPetType,
+                })],
+                { type: "application/json" }
+            )
+        );
 
 
         if (Data.photo) {
@@ -24,15 +30,20 @@ export async function registerService(Data) {
         console.log("=== PAYLOAD ENVIADO ===");
         for (let [key, value] of data.entries()) {
             if (key === "data") {
-                console.log(key, JSON.parse(value)); // bonito
+                value.text().then(text => {
+                    console.log(key, JSON.parse(text));
+                });
             } else {
-                console.log(key, value); // file
+                console.log(key, value);
             }
         }
 
         const response = await fetch("http://localhost:8080/petly/mascotas/registrar", {
             method: "POST",
-            body: data, // ⚠️ SIN headers
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: data,
         });
 
         if (!response.ok) {
