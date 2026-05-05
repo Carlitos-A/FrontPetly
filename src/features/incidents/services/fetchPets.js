@@ -1,42 +1,56 @@
 import { mockPets } from "../data/MockPets";
 const USE_MOCK = import.meta.env.VITE_USE_MOCKS === "true";
 const REPORTS_API_URL = "http://localhost:8081/petly/reportes";
+const REPORTS_BY_TYPE_API_URL = `${REPORTS_API_URL}/filtrar/tipo`;
 
-function buildQuery(filters) {
+function getReportTypeFilter(filters) {
+    return filters.tipoReporte || filters.tipo_reporte;
+}
+
+function buildReportsUrl(filters = {}) {
+    const tipoReporte = getReportTypeFilter(filters);
+
+    if (tipoReporte) {
+        const query = new URLSearchParams({ tipoReporte });
+        return `${REPORTS_BY_TYPE_API_URL}?${query.toString()}`;
+    }
+
     const query = new URLSearchParams();
 
     if (filters.estado) query.append("estado", filters.estado);
-    if (filters.tipo_reporte) query.append("tipo_reporte", filters.tipo_reporte);
     if (filters.search) query.append("search", filters.search);
 
-    return query.toString();
+    const queryString = query.toString();
+    return queryString ? `${REPORTS_API_URL}?${queryString}` : REPORTS_API_URL;
 }
 
 function normalizePets(data) {
     return data.map((pet) => ({
-        id: pet.id,
-        name: pet.nombre || pet.tipo_reporte || "Sin nombre",
+        id: pet.id || pet.idreporte,
+        name: pet.nombre || pet.tipoReporte || pet.tipo_reporte || "Sin nombre",
         species: pet.especie,
         breed: pet.raza,
-        color: pet.color_principal,
+        color: pet.colorPrincipal || pet.color_principal,
         size: pet.tamanio,
         sex: pet.sexo,
-        approximateAge: pet.edad_aproximada,
-        tipoReporte: pet.tipo_reporte,
-        status: pet.estado_mascota,
+        approximateAge: pet.edadAproximada || pet.edad_aproximada,
+        tipoReporte: pet.tipoReporte || pet.tipo_reporte,
+        status: pet.estadoMascota || pet.estado_mascota,
         description: pet.descripcion,
         contacto: pet.contacto,
-        imagen_url: pet.imagen_url,
+        imagen_url: pet.imagenUrl || pet.imagen_url,
         latitud: pet.latitud,
         longitud: pet.longitud,
-        fechaReporte: pet.fecha_reporte,
-        estadoReporte: pet.estado_reporte,
+        fechaReporte: pet.fechaReporte || pet.fecha_reporte,
+        estadoReporte: pet.estadoReporte || pet.estado_reporte,
     }));
 }
 
 function filterPets(pets, filters) {
     return pets.filter(p => {
-        if (filters.tipo_reporte && p.tipoReporte !== filters.tipo_reporte && p.tipo_reporte !== filters.tipo_reporte) return false;
+        const tipoReporte = getReportTypeFilter(filters);
+
+        if (tipoReporte && p.tipoReporte !== tipoReporte && p.tipo_reporte !== tipoReporte) return false;
         if (filters.estado && p.estadoReporte !== filters.estado && p.estado_reporte !== filters.estado) return false;
         if (filters.search) {
             const searchableText = [
@@ -62,8 +76,7 @@ export async function fetchPets(filters = {}) {
         return filterPets(mockPets, filters);
     }
 
-    const query = buildQuery(filters);
-    const url = query ? `${REPORTS_API_URL}?${query}` : REPORTS_API_URL;
+    const url = buildReportsUrl(filters);
 
     try {
         const res = await fetch(url);
@@ -73,10 +86,9 @@ export async function fetchPets(filters = {}) {
         }
 
         const data = await res.json();
-        return filterPets(normalizePets(data), filters);
+        return normalizePets(data);
     } catch (error) {
         console.warn("Fallback a mock:", error);
         return filterPets(mockPets, filters);
     }
 }
-
