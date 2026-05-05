@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import ReportModal from "../features/report/components/ReportModal";
 import FloatingButton from "../shared/components/FloatingButton";
@@ -17,20 +17,50 @@ export default function Home() {
   const [filters, setFilters] = useState(DEFAULT_PET_FILTERS);
   const { submitReport } = useReport();
   const [actionType, setActionType] = useState(null);
+  const gridRef = useRef(null);
   const { pets, loading } = usePets(filters);
   const { location } = useUserLocation();
+  const [selectedReportId, setSelectedReportId] = useState(null);
+
   function handleSubmit(data) {
     submitReport(data);
     setModalOpen(false);
   }
 
+  useEffect(() => {
+    if (!selectedReportId) return;
+
+    function handlePointerDown(event) {
+      if (gridRef.current?.contains(event.target)) return;
+      setSelectedReportId(null);
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [selectedReportId]);
+
+  function handleFiltersChange(nextFilters) {
+    setSelectedReportId(null);
+    setFilters(nextFilters);
+  }
+
+  function handleSearchChange(search) {
+    setSelectedReportId(null);
+    setFilters({ ...filters, search });
+  }
+
+
   return (
 
     <div className="flex flex-col md:flex-row min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
       {/*Este mapa esta comentado debido a que me ayuda a no usar de manera innecesaria la capacidad gratis de mapbox, pero en este caso me encantaria que este mapa abarcara la mitad de la pantalla también*/}
-      {/* <div className="w-full md:w-1/2 md:h-[calc(100vh-3rem)] h-75 md:sticky md:top-12">
-        <Map filters={filters} />
-      </div> */}
+      <div className="w-full md:w-1/2 md:h-[calc(100vh-3rem)] h-75 md:sticky md:top-12">
+        <Map
+          filters={filters}
+          selectedReportId={selectedReportId}
+          onReportSelect={(report) => setSelectedReportId(report.id)}
+        />
+      </div>
 
       <section className="w-full md:w-1/2 p-4 md:pt-20 bg-white/5 backdrop-blur-xl border-l border-white/10 md:h-full md:overflow-y-auto">
 
@@ -48,6 +78,7 @@ export default function Home() {
           pets={pets}
           loading={loading}
           referenceLocation={location}
+          selectedPetId={selectedReportId}
           onCardClick={(pet) => console.log("[Home] mascota seleccionada:", pet)} //Aqui deberia ir la lógica de expansión de mascota para mostrar más detalles, fotos, etc.
         />
       </section>

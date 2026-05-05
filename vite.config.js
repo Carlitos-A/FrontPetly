@@ -6,13 +6,4 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-  ],
-  server: {
-    proxy: {
-      '/petly': {
-        target: 'http://localhost:8081',
-        changeOrigin: true,
-      },
-    },
-  },
-})
+  ]})
