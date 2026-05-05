@@ -7,7 +7,6 @@ function buildQuery(filters = {}) {
   if (filters.lat != null) query.append("lat", filters.lat);
   if (filters.lng != null) query.append("lng", filters.lng);
   if (filters.radio != null) query.append("radio", filters.radio);
-  if (filters.tipo_reporte) query.append("tipo_reporte", filters.tipo_reporte);
   if (filters.estado) query.append("estado", filters.estado);
   if (filters.search) query.append("search", filters.search);
 

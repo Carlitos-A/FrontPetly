@@ -234,16 +234,16 @@ function showReportPopup(map, feature, popupRef) {
     </div>
 
     <p class="text-xs mt-2">
-        <span class="font-medium">Estado:</span> ${props.estado_mascota || "Sin estado"}
+        <span class="font-medium">Estado:</span> ${props.estado_mascota || props.estadoMascota || "Sin estado"}
     </p>
 
     <div class="grid grid-cols-2 gap-x-3 gap-y-1 mt-2 text-xs">
         <p><span class="font-medium">Especie:</span> ${props.especie || "Sin dato"}</p>
         <p><span class="font-medium">Raza:</span> ${props.raza || "Sin dato"}</p>
-        <p><span class="font-medium">Color:</span> ${props.color_principal || "Sin dato"}</p>
+        <p><span class="font-medium">Color:</span> ${props.color_principal || props.colorPrincipal || "Sin dato"}</p>
         <p><span class="font-medium">Tamaño:</span> ${props.tamanio || "Sin dato"}</p>
         <p><span class="font-medium">Sexo:</span> ${props.sexo || "Sin dato"}</p>
-        <p><span class="font-medium">Edad:</span> ${props.edad_aproximada || "Sin dato"}</p>
+        <p><span class="font-medium">Edad:</span> ${props.edad_aproximada || props.edadAproximada || "Sin dato"}</p>
     </div>
 
     <p class="text-xs mt-2">
@@ -259,19 +259,25 @@ function showReportPopup(map, feature, popupRef) {
 }
 
 function filterReports(reports = [], filters = {}) {
+    const tipoReporte = filters.tipoReporte || filters.tipo_reporte;
+
     return reports.filter((report) => {
-        if (filters.tipo_reporte && report.tipo_reporte !== filters.tipo_reporte) return false;
-        if (filters.estado && report.estado_reporte !== filters.estado) return false;
+        if (tipoReporte && report.tipoReporte !== tipoReporte && report.tipo_reporte !== tipoReporte) return false;
+        if (filters.estado && report.estadoReporte !== filters.estado && report.estado_reporte !== filters.estado) return false;
         if (filters.search) {
             const searchableText = [
                 report.nombre,
+                report.tipoReporte,
                 report.tipo_reporte,
+                report.estadoMascota,
                 report.estado_mascota,
                 report.especie,
                 report.raza,
+                report.colorPrincipal,
                 report.color_principal,
                 report.tamanio,
                 report.sexo,
+                report.edadAproximada,
                 report.edad_aproximada,
                 report.descripcion,
                 report.contacto,
