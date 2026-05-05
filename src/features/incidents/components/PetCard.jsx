@@ -1,3 +1,5 @@
+import { getDistanceFromReference } from "../utils/distance";
+
 const SPECIES_EMOJI = { dog: "🐕", cat: "🐈", other: "🐾" };
 const SPECIES_BG = { dog: "bg-orange-50", cat: "bg-violet-50", other: "bg-sky-50" };
 
@@ -13,10 +15,17 @@ function timeLabel(hours) {
   return `Hace ${days} día${days > 1 ? "s" : ""}`;
 }
 
-export default function PetCard({ pet, onClick }) {
-  const hours = hoursAgo(pet.reportedAt);
+export default function PetCard({ pet, onClick, referenceLocation, selected = false }) {
+  const hours = hoursAgo(pet.fechaReporte);
   const urgent = hours < 12;
-  const isLost = pet.status === "lost";
+  const distance = getDistanceFromReference(referenceLocation, pet);
+  const distanceLabel = distance == null ? "-- km" : `${distance.toFixed(1)} km`;
+  const estado = pet.tipoReporte;
+  const statusStyles = {
+    PERDIDA: "bg-red-500/20 text-red-400 border border-red-400/30",
+    ENCONTRADA: "bg-[#5DCAA5]/20 text-[#5DCAA5] border border-[#5DCAA5]/30",
+    AVISTAMIENTO: "bg-yellow-500/20 text-yellow-400 border border-yellow-400/30",
+  };
 
   return (
     <article
@@ -25,39 +34,38 @@ export default function PetCard({ pet, onClick }) {
         "group flex flex-col rounded-2xl overflow-hidden cursor-pointer",
         "transition-all duration-200 hover:-translate-y-1",
         "bg-white/5 backdrop-blur-xl border border-white/10",
-        urgent
+        selected
+          ? "border-[#5DCAA5] shadow-xl shadow-[#5DCAA5]/20 ring-2 ring-[#5DCAA5]/40"
+          : urgent
           ? "shadow-lg shadow-[#5DCAA5]/10 border-[#5DCAA5]/30"
           : "hover:border-white/20",
       ].join(" ")}
     >
-      {/* Image / fallback */}
-      <div className={`relative w-full h-36 flex items-center justify-center  ${SPECIES_BG[pet.species] ?? "bg-[#0f2e1f]"}}`}>
+      <div className={`relative w-full h-36 flex items-center justify-center ${SPECIES_BG[pet.species] ?? "bg-[#0f2e1f]"}`}>
         {pet.photo ? (
           <img
             src={pet.photo}
-            alt={pet.name}
+            alt={pet.estadoReporte}
             className="w-full h-full object-cover"
           />
         ) : (
           <span className="text-5xl select-none">{SPECIES_EMOJI[pet.species] ?? "🐾"}</span>
         )}
 
-        {/* Status badge */}
-        <span className={[
-          "absolute top-2 right-2 text-[10px] font-medium px-2 py-0.5 rounded-full",
-          isLost
-            ? "bg-white/10 text-white border border-white/20"
-            : "bg-[#5DCAA5]/20 text-[#5DCAA5] border border-[#5DCAA5]/30",
-        ].join(" ")}>
-          {isLost ? "Perdido" : "Encontrado"}
+        <span
+          className={[
+            "absolute top-2 right-2 text-[10px] font-medium px-2 py-0.5 rounded-full",
+            statusStyles[estado] || "bg-gray-500/20 text-gray-300",
+          ].join(" ")}
+        >
+          {estado || "Sin estado"}
         </span>
 
-        {/* Urgent time label */}
         {urgent && (
           <span className="
             absolute bottom-2 left-2 flex items-center gap-1 text-[10px]
-        font-medium bg-[#5DCAA5] text-[#0a1a10] px-2 py-0.5 rounded-full
-">
+            font-medium bg-[#5DCAA5] text-[#0a1a10] px-2 py-0.5 rounded-full
+          ">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
               <circle cx="5" cy="5" r="4" stroke="currentColor" strokeWidth="1.2" />
               <path d="M5 3v2.5l1.5 1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
@@ -67,33 +75,31 @@ export default function PetCard({ pet, onClick }) {
         )}
       </div>
 
-      {/* Body */}
       <div className="flex flex-col gap-1.5 p-3 flex-1">
         <div className="flex items-start justify-between gap-2">
-          <span className="text-sm font-medium text-white">{pet.name}</span>
-          <span className="text-xs text-white/40">{pet.distance.toFixed(1)} km</span>
+          <span className="text-sm font-medium text-white">{pet.estadoReporte}</span>
+          <span className="text-xs text-white/40">{distanceLabel}</span>
         </div>
 
         <div className="flex flex-col gap-0.5">
-          <Row label="Raza" value={pet.breed} />
-          <Row label="Color" value={pet.color} />
-          <Row label="Sector" value={pet.sector} />
+          <Row label="estado reporte" value={pet.status} />
+          <Row label="especie" value={pet.species} />
+          <Row label="raza" value={pet.breed} />
+          <Row label="color" value={pet.color} />
+          <Row label="tamaño" value={pet.size} />
+          <Row label="sexo" value={pet.sex} />
+          <Row label="edad aprox." value={pet.approximateAge} />
+          <Row label="contacto" value={pet.contacto} />
+          <Row label="descripcion" value={pet.description} />
         </div>
       </div>
 
-      {/* Footer */}
       <div className="px-3 pb-3">
-        <button className="  w-full text-xs
-  text-[#5DCAA5]
-  border border-[#5DCAA5]/30
-  bg-[#5DCAA5]/10
-  hover:bg-[#5DCAA5]/20
-  transition-all
-  rounded-lg py-1.5 font-medium">
+        <button className="w-full text-xs text-[#5DCAA5] border border-[#5DCAA5]/30 bg-[#5DCAA5]/10 hover:bg-[#5DCAA5]/20 transition-all rounded-lg py-1.5 font-medium">
           Ver contacto →
         </button>
       </div>
-    </article >
+    </article>
   );
 }
 
@@ -101,7 +107,7 @@ function Row({ label, value }) {
   return (
     <p className="text-xs text-white/60">
       <span className="text-white/30">{label}: </span>
-      {value}
+      {value || "Sin información"}
     </p>
   );
 }

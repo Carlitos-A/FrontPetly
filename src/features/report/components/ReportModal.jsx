@@ -12,18 +12,35 @@ import { useState, useEffect } from "react";
  
 const EMPTY = {
   name: "",
-  species: "dog",
+  species: "Perro",
   breed: "",
   color: "",
+  size: "",
+  sex: "",
+  approximateAge: "",
   sector: "",
   contact: "",
   description: "",
 };
  
 const SPECIES_OPTIONS = [
-  { value: "dog",   label: "Perro" },
-  { value: "cat",   label: "Gato" },
-  { value: "other", label: "Otro" },
+  { value: "Perro", label: "Perro" },
+  { value: "Gato", label: "Gato" },
+  { value: "Otro", label: "Otro" },
+];
+
+const SIZE_OPTIONS = [
+  { value: "", label: "Seleccionar" },
+  { value: "Pequeño", label: "Pequeño" },
+  { value: "Mediano", label: "Mediano" },
+  { value: "Grande", label: "Grande" },
+];
+
+const SEX_OPTIONS = [
+  { value: "", label: "Seleccionar" },
+  { value: "Macho", label: "Macho" },
+  { value: "Hembra", label: "Hembra" },
+  { value: "No se sabe", label: "No se sabe" },
 ];
  
 export default function ReportModal({ open, onClose, onSubmit }) {
@@ -52,7 +69,15 @@ export default function ReportModal({ open, onClose, onSubmit }) {
  
   function handleSubmit(e) {
     e.preventDefault();
-    onSubmit(form);
+    onSubmit({
+      ...form,
+      especie: form.species,
+      raza: form.breed,
+      color_principal: form.color,
+      tamanio: form.size,
+      sexo: form.sex,
+      edad_aproximada: form.approximateAge,
+    });
     setForm(EMPTY);
   }
  
@@ -135,6 +160,33 @@ export default function ReportModal({ open, onClose, onSubmit }) {
               />
             </Field>
           </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Tamaño">
+              <select name="size" value={form.size} onChange={handleChange} className={inputCls}>
+                {SIZE_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </Field>
+            <Field label="Sexo">
+              <select name="sex" value={form.sex} onChange={handleChange} className={inputCls}>
+                {SEX_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </Field>
+          </div>
+
+          <Field label="Edad aproximada">
+            <input
+              name="approximateAge"
+              value={form.approximateAge}
+              onChange={handleChange}
+              placeholder="Ej: 2 años, cachorro, adulto"
+              className={inputCls}
+            />
+          </Field>
  
           <Field label="Sector donde se perdió" required>
             <input
