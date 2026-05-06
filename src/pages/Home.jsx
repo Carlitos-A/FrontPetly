@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import ReportModal from "../features/report/components/ReportModal";
+
 import FloatingButton from "../shared/components/FloatingButton";
 import { useReport } from "../features/report/hooks/useReport";
 import Map from "../features/map/components/MapBox";
@@ -10,6 +10,7 @@ import { DEFAULT_PET_FILTERS } from "../features/incidents/constants/filters";
 import { usePets } from "../features/incidents/hooks/usePets";
 import SearchBar from "../features/incidents/components/SearchBar";
 import { useUserLocation } from "../shared/hooks/useUserLocation";
+import ReportModal from "../features/report/components/ReportModal"
 
 export default function Home() {
 
@@ -21,10 +22,23 @@ export default function Home() {
   const { pets, loading } = usePets(filters);
   const { location } = useUserLocation();
   const [selectedReportId, setSelectedReportId] = useState(null);
+  const [tipoReporte, setTipoReporte] = useState(null);
+
+  const mapTipo = {
+    Encontrado: "ENCONTRADA",
+    Perdido: "PERDIDA",
+    Avistamiento: "AVISTAMIENTO",
+  };
 
   function handleSubmit(data) {
-    submitReport(data);
+    submitReport(data, tipoReporte);
     setModalOpen(false);
+  }
+
+  function handleClose() {
+    setModalOpen(false);
+    setTipoReporte(null);
+    setActionType(null);
   }
 
   useEffect(() => {
@@ -60,6 +74,7 @@ export default function Home() {
           selectedReportId={selectedReportId}
           onReportSelect={(report) => setSelectedReportId(report.id)}
         />
+
       </div>
 
       <section className="w-full md:w-1/2 p-4 md:pt-20 bg-white/5 backdrop-blur-xl border-l border-white/10 md:h-full md:overflow-y-auto">
@@ -89,17 +104,17 @@ export default function Home() {
         onAction={(type) => {
           setActionType(type);
           setModalOpen(true);
+          setTipoReporte(mapTipo[type])
         }
         } />
 
-      {/*Al presionar el floating button se abre el modal para rellenar el reporte, este deberia abrire en el centro de la pantalla*/}
       <ReportModal
         open={modalOpen}
         actionType={actionType}
-        onClose={() => setModalOpen(false)}
+        tipoReporte={tipoReporte}
+        onClose={handleClose}
         onSubmit={handleSubmit}
       />
-      {/*El onSubmit del modal se encarga de enviar el reporte a la base de datos, y luego cierra el modal*/}
 
 
     </div>
