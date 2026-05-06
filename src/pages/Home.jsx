@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import ReportModal from "../features/report/components/ReportModal";
 import FloatingButton from "../shared/components/FloatingButton";
 import { useReport } from "../features/report/hooks/useReport";
-import Map from "../features/map/components/MapBox";
+import Map from "../features/map/components/mapBox";
 import PetGrid from "../features/incidents/components/PetGrid";
 import Filters from "../features/incidents/components/Filter";
 import { DEFAULT_PET_FILTERS } from "../features/incidents/constants/filters";
@@ -39,16 +39,6 @@ export default function Home() {
     return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, [selectedReportId]);
 
-  function handleFiltersChange(nextFilters) {
-    setSelectedReportId(null);
-    setFilters(nextFilters);
-  }
-
-  function handleSearchChange(search) {
-    setSelectedReportId(null);
-    setFilters({ ...filters, search });
-  }
-
 
   return (
 
@@ -67,11 +57,20 @@ export default function Home() {
 
         <SearchBar
           value={filters.search}
-          onChange={(val) => setFilters({ ...filters, search: val })}
+          onChange={(val) => {
+            setSelectedReportId(null);
+            setFilters({ ...filters, search: val });
+          }}
         />
 
         {/* Este es el filtro que realiza el puente entre el front y la lógica del backend, al cambiar el filtro se actualizan los incidentes mostrados en el petgrid, lo ideal es que este filtro se mantuviera fijo en la parte superior de la pantalla mientras se hace scroll por los incidentes. */}
-        <Filters value={filters} onChange={setFilters} />
+        <Filters
+          value={filters}
+          onChange={(nextFilters) => {
+            setSelectedReportId(null);
+            setFilters(nextFilters);
+          }}
+        />
         {/*Este petgrid me ayuda a mostrar los animales disponibles para adopción/búsqueda. Al fin y al cabo es solo muestreo, me encantaría que ocupara solo la mitad de la pantalla*/}
 
         <PetGrid

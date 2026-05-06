@@ -5,6 +5,8 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import PetRegistrationPage from "../pages/PetRegistrationPage";
 import MisMascotas from "../pages/MisMascotas";
+import EditUserProfile from "../pages/EditUserProfile";
+import EditPet from "../pages/EditPet";
 
 export default function AppRouter() {
     return (
@@ -16,6 +18,9 @@ export default function AppRouter() {
                     <Route path="/login" element={<Login/>} />
                     <Route path="/agregar-mascota" element={<PetRegistrationPage/>} />
                     <Route path="/mis-mascotas" element={<MisMascotas/>} />
+                    <Route path="/editar-usuario" element={<EditUserProfile/>} />
+                    <Route path="/perfil" element={<EditUserProfile/>} />
+                    <Route path="/editar-mascota/:petId" element={<EditPet/>} />
                 </Route>
             </Routes>
         </BrowserRouter>
