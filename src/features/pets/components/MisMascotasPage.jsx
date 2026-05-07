@@ -1,12 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useMisMascotas } from "../hooks/useMisMascotas";
+import { getPetId } from "../services/editPetService";
 import MisMascotasGrid from "./MisMascotasGrid";
 
   export default function MisMascotasPage() {
     const { pets, loading, error } = useMisMascotas();
+    const navigate = useNavigate();
 
     function handleEdit(pet) {
-      console.log("Editar:", pet);
+     navigate(`/editar-mascota/${getPetId(pet)}`, { state: { pet } });
     }
 
     function handleDelete(pet) {
