@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useAuth } from "../../features/auth/components/AuthContext";
+import { useAuth } from "../../features/auth/context/authContext";
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -135,6 +135,8 @@ export default function Header() {
                                                 Perfil
                                             </Link>
                                         </li>
+
+                                        
 
                                         <li className="mt-1 border-t border-white/10 pt-1">
                                             <button
