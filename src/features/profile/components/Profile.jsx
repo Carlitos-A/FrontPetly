@@ -8,7 +8,18 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] px-4 pb-12 pt-20 text-white">
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-8">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-xl md:p-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-[#5DCAA5]">Perfil / User</p>
+              <div className="flex justify-between items-center">
+                <p className="text-sm uppercase tracking-[0.3em] text-[#5DCAA5]">
+                  Perfil
+                </p>
+                <Link
+                  to="/editar-usuario"
+                  className="rounded-xl border border-[#5DCAA5]/30 bg-[#5DCAA5]/10 px-4 py-2 text-sm font-semibold text-[#5DCAA5] transition hover:bg-[#5DCAA5]/20"
+                >
+                  Editar perfil
+                </Link>
+
+              </div>
           <div className="mt-6 flex flex-col gap-5 md:flex-row md:items-center">
             <img
               src="src/assets/pfp.jpg"
@@ -24,6 +35,7 @@ export default function ProfilePage() {
               </p>
             </div>
           </div>
+            
         </div>
 
         <div className="grid gap-5 md:grid-cols-2">
