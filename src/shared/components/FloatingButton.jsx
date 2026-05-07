@@ -10,8 +10,25 @@ export default function FloatingButton({ onAction }) {
       <div className="flex flex-col items-center gap-2 pb-4">
 
         {/* Botones desplegables */}
-        <div className={`flex flex-row items-center gap-2 transition-all duration-300 ${isOpen ? "opacity-100 translate-y-0 -translate-x-1" : "opacity-0 translate-y-10 -translate-x-1 pointer-events-none"
+        <div className={`flex flex-row items-center gap-2 transition-all duration-300 ${isOpen ? "opacity-100 translate-y-0 -translate-x-4" : "opacity-0 translate-y-10 -translate-x-4 pointer-events-none"
           }`}>
+
+          <div className="flex flex-col items-center gap-1">
+            <button
+              type="button"
+              onClick={() => { onAction("Avistamiento"); setIsOpen(false); }}
+              className="h-12 w-12 rounded-full cursor-pointer bg-[#3B82F6] text-white shadow-lg shadow-[#3B82F6]/20 hover:bg-[#2563eb] hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center"
+            >
+              {/* Icono ojo */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </button>
+            <span className="text-xs font-medium text-white px-2 py-0.5 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 shadow">
+              Avistamiento
+            </span>
+          </div>
 
           {/* Encontrado */}
           <div className="flex flex-col items-center gap-1">
@@ -24,7 +41,7 @@ export default function FloatingButton({ onAction }) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </button>
-            <span className="text-xs font-medium text-white drop-shadow">Encontrado</span>
+            <span className="text-xs font-medium text-white px-2 py-0.5 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 shadow">Encontrado</span>
 
           </div>
 
@@ -33,7 +50,7 @@ export default function FloatingButton({ onAction }) {
             <button
               type="button"
               onClick={() => { onAction("Perdido"); setIsOpen(false); }}
-              className="h-12 w-12 rounded-full cursor-pointer bg-white/5 text-white border border-[#5DCAA5]/30 shadow-lg hover:bg-white/10 hover:border-[#5DCAA5]/60 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center">
+              className="h-12 w-12 rounded-full cursor-pointer bg-black/60 text-white border border-[#5DCAA5]/30 shadow-lg hover:bg-black/90 hover:border-[#5DCAA5]/60 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center">
               {/* Huella*/}
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                 <ellipse cx="9" cy="4.5" rx="1.8" ry="2.3" />
@@ -43,9 +60,14 @@ export default function FloatingButton({ onAction }) {
                 <path d="M12 10c-3.5 0-6 2-6 5.5 0 2 1.5 3.5 3 3.5.8 0 1.5-.3 2-.6.3-.2.7-.2 1 0 .5.3 1.2.6 2 .6 1.5 0 3-1.5 3-3.5C17 12 14.5 10 12 10z" />
               </svg>
             </button>
-            <span className="text-xs font-medium text-white drop-shadow">Perdido</span>
+            <span className="text-xs font-medium text-white px-2 py-0.5 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 shadow">Perdido</span>
           </div>
+
+
         </div>
+
+
+
 
         {/* Entra el boton principal */}
         <button

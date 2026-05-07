@@ -16,7 +16,13 @@ export default function Field({ label, children }) {
                    [&_select]:rounded-lg [&_select]:px-4 [&_select]:py-3 [&_select]:text-[14px]
                    [&_select]:text-white [&_select]:outline-none [&_select]:transition-all [&_select]:duration-200 [&_select]:cursor-pointer
                    [&_select:focus]:border-[rgba(93,202,165,0.8)] [&_select:focus]:bg-[rgba(93,202,165,0.08)] [&_select:focus]:shadow-lg [&_select:focus]:shadow-[rgba(93,202,165,0.1)]
-                   [&_select_option]:bg-[#1a2e22] [&_select_option]:text-white"
+                    [&_select>option]:bg-[#1a2e22] [&_select>option]:text-white
+                   [&_textarea]:w-full [&_textarea]:bg-white/6 [&_textarea]:border [&_textarea]:border-white/12
+                    [&_textarea]:rounded-lg [&_textarea]:px-4 [&_textarea]:py-3 [&_textarea]:text-[14px]
+                    [&_textarea]:text-white [&_textarea]:outline-none [&_textarea]:transition-all [&_textarea]:duration-200
+                    [&_textarea:focus]:border-[rgba(93,202,165,0.8)] [&_textarea:focus]:bg-[rgba(93,202,165,0.08)]
+                     [&_textarea:focus]:shadow-lg [&_textarea:focus]:shadow-[rgba(93,202,165,0.1)]
+                     [&_textarea::placeholder]:text-white/30"
             >
                 {children}
             </div>

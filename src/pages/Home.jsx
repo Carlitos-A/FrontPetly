@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import ReportModal from "../features/report/components/ReportModal";
+
 import FloatingButton from "../shared/components/FloatingButton";
 import { useReport } from "../features/report/hooks/useReport";
 import Map from "../features/map/components/MapBox";
@@ -10,21 +10,38 @@ import { DEFAULT_PET_FILTERS } from "../features/incidents/constants/filters";
 import { usePets } from "../features/incidents/hooks/usePets";
 import SearchBar from "../features/incidents/components/SearchBar";
 import { useUserLocation } from "../shared/hooks/useUserLocation";
+import ReportModal from "../features/report/components/ReportModal";
+import AuthGuardModal from "../shared/components/AuthGuardModal";
+import { useAuth } from "../features/auth/components/AuthContext";
 
 export default function Home() {
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [authGuardOpen, setAuthGuardOpen] = useState(false);
   const [filters, setFilters] = useState(DEFAULT_PET_FILTERS);
   const { submitReport } = useReport();
+  const { user } = useAuth();
   const [actionType, setActionType] = useState(null);
   const gridRef = useRef(null);
   const { pets, loading } = usePets(filters);
   const { location } = useUserLocation();
   const [selectedReportId, setSelectedReportId] = useState(null);
+  const [tipoReporte, setTipoReporte] = useState(null);
 
-  function handleSubmit(data) {
-    submitReport(data);
+  const mapTipo = {
+    Encontrado: "ENCONTRADA",
+    Perdido: "PERDIDA",
+    Avistamiento: "AVISTAMIENTO",
+  };
+
+  async function handleSubmit(data) {
+    await submitReport(data, tipoReporte);
+  }
+
+  function handleClose() {
     setModalOpen(false);
+    setTipoReporte(null);
+    setActionType(null);
   }
 
   useEffect(() => {
@@ -49,6 +66,7 @@ export default function Home() {
           selectedReportId={selectedReportId}
           onReportSelect={(report) => setSelectedReportId(report.id)}
         />
+
       </div>
 
       <section className="w-full md:w-1/2 p-4 md:pt-20 bg-white/5 backdrop-blur-xl border-l border-white/10 md:h-full md:overflow-y-auto">
@@ -76,19 +94,25 @@ export default function Home() {
       {/* FAB centrado horizontalmente */}
       <FloatingButton
         onAction={(type) => {
+          if (!user) {
+            setAuthGuardOpen(true);
+            return;
+          }
           setActionType(type);
           setModalOpen(true);
-        }
-        } />
+          setTipoReporte(mapTipo[type]);
+        }}
+      />
 
-      {/*Al presionar el floating button se abre el modal para rellenar el reporte, este deberia abrire en el centro de la pantalla*/}
       <ReportModal
         open={modalOpen}
         actionType={actionType}
-        onClose={() => setModalOpen(false)}
+        tipoReporte={tipoReporte}
+        onClose={handleClose}
         onSubmit={handleSubmit}
       />
-      {/*El onSubmit del modal se encarga de enviar el reporte a la base de datos, y luego cierra el modal*/}
+
+      <AuthGuardModal open={authGuardOpen} onClose={() => setAuthGuardOpen(false)} />
 
 
     </div>

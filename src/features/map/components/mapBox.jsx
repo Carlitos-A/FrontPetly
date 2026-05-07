@@ -9,11 +9,21 @@ const EMPTY_GEOJSON = {
     features: [],
 };
 
-function Map({ filters = {}, selectedReportId, onReportSelect }) {
+
+function Map({
+    filters = {},
+    selectedReportId,
+    onReportSelect,
+    selectable = false,
+    selectedCoords = null,
+    onLocationSelect, }) {
+
+
     const mapRef = useRef();
     const mapContainerRef = useRef();
     const onReportSelectRef = useRef(onReportSelect);
     const popupRef = useRef(null);
+    const selectionMarkerRef = useRef(null);
     const token = import.meta.env.VITE_MAPBOX_TOKEN;
     const [mapReady, setMapReady] = useState(false);
     const [error] = useState(() =>
@@ -27,7 +37,7 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
     }, [onReportSelect]);
 
     useEffect(() => {
-        if (!token || token === "tu_token_de_mapbox" || error) return;
+        if (!token || error) return;
 
         mapboxgl.accessToken = token;
 
@@ -41,9 +51,20 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
         mapRef.current = map;
 
         map.on("load", () => {
-            addReportsLayer(map);
-            bindReportEvents(map, onReportSelectRef, popupRef);
+            if (!selectable) {
+                addReportsLayer(map);
+                bindReportEvents(map, onReportSelectRef, popupRef);
+            }
             setMapReady(true);
+        });
+
+        //Verifica si la seleccion esta activada, sino, no hace nada
+        //En caso de que si se extraen las coordenadas del punto donde se hizo click
+        map.on("click", (e) => {
+            if (!selectable) return;
+
+            const { lng, lat } = e.lngLat;
+            onLocationSelect?.({ lat, lng });
         });
 
         map.on("error", (event) => {
@@ -56,11 +77,13 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
             popupRef.current?.remove();
             popupRef.current = null;
             setMapReady(false);
+            selectionMarkerRef.current?.remove();
+            selectionMarkerRef.current = null;
         };
-    }, [token, error]);
+    }, [token, error, selectable]);
 
     useEffect(() => {
-        if (!mapReady || !mapRef.current) return;
+        if (!mapReady || !mapRef.current || selectable) return;
 
         let ignore = false;
 
@@ -87,7 +110,7 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
     }, [filters, mapReady]);
 
     useEffect(() => {
-        if (!mapReady || !mapRef.current) return;
+        if (!mapReady || !mapRef.current || selectable) return;
 
         const selectedId = selectedReportId == null ? "" : String(selectedReportId);
 
@@ -115,6 +138,29 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
             });
         }
     }, [selectedReportId, mapReady]);
+
+    useEffect(() => {
+        if (!mapReady || !mapRef.current || !selectable) return;
+        if (!selectedCoords) return;
+
+        // eliminar anterior
+        selectionMarkerRef.current?.remove();
+
+        // crear nuevo
+        selectionMarkerRef.current = new mapboxgl.Marker({ color: "#5DCAA5" })
+            .setLngLat([selectedCoords.lng, selectedCoords.lat])
+            .addTo(mapRef.current);
+
+        // centrar mapa al punto seleccionado
+        mapRef.current.easeTo({
+            center: [selectedCoords.lng, selectedCoords.lat],
+            //Hace un zoom
+            zoom: 14,
+            //Lento
+            duration: 500,
+        });
+    }, [selectedCoords, selectable, mapReady]);
+
 
     if (!token || token === "tu_token_de_mapbox") {
         return (
