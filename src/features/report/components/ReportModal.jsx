@@ -243,8 +243,6 @@ export default function ReportModal({ open, onClose, onSubmit }) {
   );
 }
  
-// ── helpers ──────────────────────────────────────────────────────────────────
- 
 const inputCls = [
   "w-full px-3 py-2 text-sm rounded-lg bg-stone-50",
   "border border-stone-200 text-stone-900 placeholder-stone-400",

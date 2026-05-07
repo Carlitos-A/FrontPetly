@@ -18,10 +18,10 @@ export default function ReportPage() {
               </p>
             </div>
             <Link
-              to="/mis-mascotas"
+              to="/perfil"
               className="rounded-xl border border-[#5DCAA5]/30 bg-[#5DCAA5]/10 px-4 py-2 text-center text-sm font-semibold text-[#5DCAA5] transition hover:bg-[#5DCAA5]/20"
             >
-              Ver mis mascotas
+              Volver a mi perfil
             </Link>
           </div>
         </div>

@@ -36,7 +36,7 @@ export default function Header() {
 
                 {/* CENTRO */}
                 <ul className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 gap-8 text-white">
-                    <li><a className="hover:text-[#5DCAA5]" href="#">Home</a></li>
+                    <li><a className="hover:text-[#5DCAA5]" href="/">Home</a></li>
                     <li><a className="hover:text-[#5DCAA5]" href="#">Servicios</a></li>
                     <li><a className="hover:text-[#5DCAA5]" href="#">Contacto</a></li>
                 </ul>
@@ -144,6 +144,15 @@ export default function Header() {
                                                 Mis reportes
                                             </Link>
                                         </li>
+                                         <li>
+                                            <Link
+                                                to="/mis-mascotas"
+                                                className="flex items-center px-3 py-2 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                                            >
+                                                Mis mascotas
+                                            </Link>
+                                        </li>
+
 
 
                                         <li className="mt-1 border-t border-white/10 pt-1">
