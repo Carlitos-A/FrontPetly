@@ -136,7 +136,15 @@ export default function Header() {
                                             </Link>
                                         </li>
 
-                                        
+                                         <li>
+                                            <Link
+                                                to="/mis-reportes"
+                                                className="flex items-center px-3 py-2 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                                            >
+                                                Mis reportes
+                                            </Link>
+                                        </li>
+
 
                                         <li className="mt-1 border-t border-white/10 pt-1">
                                             <button
@@ -182,11 +190,11 @@ export default function Header() {
                                         <p className="text-white/50 text-xs">{user.correo}</p>
                                     </div>
                                 </div>
-                                <Link className="py-2 hover:text-[#5DCAA5]" to="/dashboard">
-                                    Dashboard
-                                </Link>
                                 <Link className="py-2 hover:text-[#5DCAA5]" to="/perfil">
                                     Perfil
+                                </Link>
+                                <Link className="py-2 hover:text-[#5DCAA5]" to="/mis-reportes">
+                                    Mis reportes
                                 </Link>
                                 <button onClick={logout} className="text-left py-2 text-red-300 hover:text-red-400">
                                     Cerrar sesión
