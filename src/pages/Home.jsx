@@ -56,17 +56,6 @@ export default function Home() {
     return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, [selectedReportId]);
 
-  function handleFiltersChange(nextFilters) {
-    setSelectedReportId(null);
-    setFilters(nextFilters);
-  }
-
-  function handleSearchChange(search) {
-    setSelectedReportId(null);
-    setFilters({ ...filters, search });
-  }
-
-
   return (
 
     <div className="flex flex-col md:flex-row min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
