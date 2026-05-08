@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 
 import ReportModal from "../features/report/components/ReportModal";
 import FloatingButton from "../shared/components/FloatingButton";
 import { useReport } from "../features/report/hooks/useReport";
-import Map from "../features/map/components/MapBox";
+import Map from "../features/map/components/mapBox";
 import PetGrid from "../features/incidents/components/PetGrid";
+import ReportDetail from "../features/incidents/components/ReportDetail";
 import Filters from "../features/incidents/components/Filter";
 import { DEFAULT_PET_FILTERS } from "../features/incidents/constants/filters";
 import { usePets } from "../features/incidents/hooks/usePets";
@@ -17,27 +18,45 @@ export default function Home() {
   const [filters, setFilters] = useState(DEFAULT_PET_FILTERS);
   const { submitReport } = useReport();
   const [actionType, setActionType] = useState(null);
-  const gridRef = useRef(null);
   const { pets, loading } = usePets(filters);
   const { location } = useUserLocation();
   const [selectedReportId, setSelectedReportId] = useState(null);
+  const [selectedReport, setSelectedReport] = useState(null);
 
   function handleSubmit(data) {
     submitReport(data);
     setModalOpen(false);
   }
 
-  useEffect(() => {
-    if (!selectedReportId) return;
+  const selectedReportDetail = useMemo(() => {
+    if (!selectedReportId) return null;
 
-    function handlePointerDown(event) {
-      if (gridRef.current?.contains(event.target)) return;
-      setSelectedReportId(null);
-    }
+    return (
+      pets.find((pet) => String(pet.id) === String(selectedReportId)) ||
+      normalizeMapReport(selectedReport)
+    );
+  }, [pets, selectedReport, selectedReportId]);
 
-    document.addEventListener("pointerdown", handlePointerDown);
-    return () => document.removeEventListener("pointerdown", handlePointerDown);
-  }, [selectedReportId]);
+  function clearSelectedReport() {
+    setSelectedReportId(null);
+    setSelectedReport(null);
+  }
+
+  function handleFiltersChange(nextFilters) {
+    clearSelectedReport();
+    setFilters(nextFilters);
+  }
+
+  function handleSearchChange(search) {
+    clearSelectedReport();
+    setFilters({ ...filters, search });
+  }
+
+  function handleReportSelect(report) {
+    setSelectedReportId(report.id);
+    setSelectedReport(report);
+  }
+
 
   return (
 
@@ -47,7 +66,7 @@ export default function Home() {
         <Map
           filters={filters}
           selectedReportId={selectedReportId}
-          onReportSelect={(report) => setSelectedReportId(report.id)}
+          onReportSelect={handleReportSelect}
         />
       </div>
 
@@ -56,20 +75,24 @@ export default function Home() {
 
         <SearchBar
           value={filters.search}
-          onChange={(val) => setFilters({ ...filters, search: val })}
+          onChange={handleSearchChange}
         />
 
         {/* Este es el filtro que realiza el puente entre el front y la lógica del backend, al cambiar el filtro se actualizan los incidentes mostrados en el petgrid, lo ideal es que este filtro se mantuviera fijo en la parte superior de la pantalla mientras se hace scroll por los incidentes. */}
-        <Filters value={filters} onChange={setFilters} />
+        <Filters value={filters} onChange={handleFiltersChange} />
         {/*Este petgrid me ayuda a mostrar los animales disponibles para adopción/búsqueda. Al fin y al cabo es solo muestreo, me encantaría que ocupara solo la mitad de la pantalla*/}
 
-        <PetGrid
-          pets={pets}
-          loading={loading}
-          referenceLocation={location}
-          selectedPetId={selectedReportId}
-          onCardClick={(pet) => console.log("[Home] mascota seleccionada:", pet)} //Aqui deberia ir la lógica de expansión de mascota para mostrar más detalles, fotos, etc.
-        />
+        {selectedReportDetail ? (
+          <ReportDetail report={selectedReportDetail} onBack={clearSelectedReport} />
+        ) : (
+          <PetGrid
+            pets={pets}
+            loading={loading}
+            referenceLocation={location}
+            selectedPetId={selectedReportId}
+            onCardClick={handleReportSelect}
+          />
+        )}
       </section>
 
       {/*Este floating button sirve para crear reportes de pérdida. Lo ideal es lograr que este al medio, es de prueba, por lo tanto no hay que centrarse (Aún) en funcionalidad*/}
@@ -93,4 +116,30 @@ export default function Home() {
 
     </div>
   );
+}
+
+
+function normalizeMapReport(report) {
+  if (!report) return null;
+
+  return {
+    id: report.id || report.idreporte,
+    name: report.nombre || report.tipoReporte || report.tipo_reporte || "Sin nombre",
+    species: report.especie,
+    breed: report.raza,
+    color: report.colorPrincipal || report.color_principal,
+    size: report.tamanio,
+    sex: report.sexo,
+    approximateAge: report.edadAproximada || report.edad_aproximada,
+    tipoReporte: report.tipoReporte || report.tipo_reporte,
+    status: report.estadoMascota || report.estado_mascota,
+    description: report.descripcion,
+    contacto: report.contacto,
+    photo: report.photo || report.imagenUrl || report.imagen_url,
+    imagen_url: report.imagenUrl || report.imagen_url,
+    latitud: report.latitud,
+    longitud: report.longitud,
+    fechaReporte: report.fechaReporte || report.fecha_reporte,
+    estadoReporte: report.estadoReporte || report.estado_reporte,
+  };
 }
