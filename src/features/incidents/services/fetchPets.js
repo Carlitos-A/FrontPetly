@@ -38,6 +38,7 @@ function normalizePets(data) {
         status: pet.estadoMascota || pet.estado_mascota,
         description: pet.descripcion,
         contacto: pet.contacto,
+        photo: pet.photo || pet.imagenUrl || pet.imagen_url,
         imagen_url: pet.imagenUrl || pet.imagen_url,
         latitud: pet.latitud,
         longitud: pet.longitud,
