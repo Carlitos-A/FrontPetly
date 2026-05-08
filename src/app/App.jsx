@@ -1,11 +1,9 @@
-import { AuthProvider } from "../features/auth/components/AuthContext"
-import AppRouter from "./Router"
+import Home from "../pages/Home"
+
 
 function App() {
   return (
-    <AuthProvider>
-      <AppRouter />
-    </AuthProvider>
+    Home()
   )
 }
 
