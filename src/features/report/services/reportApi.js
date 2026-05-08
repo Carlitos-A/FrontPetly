@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8081";
+const API_URL = "http://localhost:8080";
 
 export async function createReport(data, tipoReporte) {
   const formData = new FormData();
