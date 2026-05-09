@@ -37,6 +37,8 @@ function isValidContact(val) {
 function getErrors(form, photo) {
   const e = {};
 
+  if (!photo) e.photo = "Agrega una foto";
+
   if (!form.especie) e.especie = "Selecciona una especie";
 
   if (form.especie === "OTRO") {

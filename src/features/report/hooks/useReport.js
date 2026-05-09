@@ -19,17 +19,6 @@ export function useReport() {
       setLoading(false);
     }
   }
-  
-  function handleSubmit(data) {
-    submitReport(data, tipoReporte)
-      .then(() => {
-        setModalOpen(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
   return {
     submitReport,
     loading,
