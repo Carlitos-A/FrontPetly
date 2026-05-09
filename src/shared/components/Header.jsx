@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../features/auth/context/authContext";
 import { Link } from "react-router-dom";
+import logoImg from "../../assets/logo.png";
+import pfpImg from "../../assets/pfp.jpg";
 
 export default function Header() {
     const { user, logout } = useAuth();
@@ -27,7 +29,7 @@ export default function Header() {
                 {/* IZQUIERDA */}
                 <div className="flex items-center">
                     <a href="/" className="flex items-center gap-2">
-                        <img src="src/assets/logo.png" className="h-7" alt="Logo" />
+                        <img src={logoImg} className="h-7" alt="Logo" />
                         <span className="text-white text-xl font-semibold">
                             Petly
                         </span>
@@ -92,7 +94,7 @@ export default function Header() {
                                     </span>
 
                                     <img
-                                        src={"src/assets/pfp.jpg"}
+                                        src={pfpImg}
                                         alt="avatar"
                                         className="w-8 h-8 rounded-full object-cover border border-white/20"
                                     />
@@ -193,7 +195,7 @@ export default function Header() {
                         ) : (
                             <div className="flex flex-col gap-2 text-sm text-white">
                                 <div className="flex items-center gap-3 pb-2 border-b border-white/10">
-                                    <img src="src/assets/pfp.jpg" alt="avatar" className="w-8 h-8 rounded-full object-cover border border-white/20" />
+                                    <img src={pfpImg} alt="avatar" className="w-8 h-8 rounded-full object-cover border border-white/20" />
                                     <div>
                                         <p className="font-medium">{user.nombre}</p>
                                         <p className="text-white/50 text-xs">{user.correo}</p>

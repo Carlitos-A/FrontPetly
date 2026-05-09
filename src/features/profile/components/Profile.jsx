@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/context/authContext";
+import pfpImg from "../../../assets/pfp.jpg";
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -11,7 +12,7 @@ export default function ProfilePage() {
           <p className="text-sm uppercase tracking-[0.3em] text-[#5DCAA5]">Perfil / User</p>
           <div className="mt-6 flex flex-col gap-5 md:flex-row md:items-center">
             <img
-              src="src/assets/pfp.jpg"
+              src={pfpImg}
               alt="Avatar de usuario"
               className="h-24 w-24 rounded-full border border-white/20 object-cover"
             />
