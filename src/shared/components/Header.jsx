@@ -21,7 +21,7 @@ export default function Header() {
     }, []);
 
     return (
-        <nav className="bg-black/30 backdrop-blur fixed w-full top-0 left-0 z-20 border-b border-white/10">
+        <nav className="bg-[#1a412f]/95 backdrop-blur fixed w-full top-0 left-0 z-20 border-b border-white/10">
             <div className="max-w-7xl mx-auto flex justify-between items-center p-1">
 
                 {/* IZQUIERDA */}
