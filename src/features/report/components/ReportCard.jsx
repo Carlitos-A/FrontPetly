@@ -31,7 +31,6 @@ function formatDate(value) {
 
 export default function MiReporteCard({ report }) {
   const reportType = getReportValue(report, "tipoReporte", "tipo_reporte", "Reporte");
-  const reportStatus = getReportValue(report, "estadoReporte", "estado_reporte", "Activo");
   const petStatus = getReportValue(report, "estadoMascota", "estado_mascota");
   const imageUrl = getReportValue(report, "imagenUrl", "imagen_url", "");
   const color = getReportValue(report, "colorPrincipal", "color_principal");
@@ -65,9 +64,9 @@ export default function MiReporteCard({ report }) {
             <h3 className="text-lg font-bold text-white">
               {petName || `${report.especie ? report.especie.charAt(0).toUpperCase() + report.especie.slice(1).toLowerCase() : "Mascota"} ${tipoMasculino(reportType)}`}
             </h3>
-            <span className="rounded-full border border-white/10 bg-white/10 px-2 py-1 text-[11px] text-white/70">
+            {/* <span className="rounded-full border border-white/10 bg-white/10 px-2 py-1 text-[11px] text-white/70">
               {reportStatus}
-            </span>
+            </span> */}
           </div>
           <p className="mt-1 text-xs text-white/50">
             Publicado: {formatDate(reportDate)}

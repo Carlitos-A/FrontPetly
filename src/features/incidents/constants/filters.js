@@ -1,6 +1,5 @@
 export const DEFAULT_PET_FILTERS = {
     tipo_reporte: null,
-    estado: null,
     search: "",
 };
 export const FILTER_OPTIONS = {
