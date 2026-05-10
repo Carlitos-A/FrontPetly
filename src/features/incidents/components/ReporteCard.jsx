@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ubicacionCoord } from "../../map/services/ubicacionService";
 import PawIcon from "../../../shared/components/PawIcon";
 
@@ -9,6 +10,7 @@ const TYPE_STYLES = {
 };
 
 export default function ReporteCard({ report }) {
+  const navigate = useNavigate();
   const [titulo, setTitulo] = useState(report.titulo);
 
   useEffect(() => {
@@ -26,7 +28,10 @@ export default function ReporteCard({ report }) {
   }, [report.latitud, report.longitud]);
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-[#143624]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+    <article
+      onClick={() => navigate(`/reportes/${report.id}`, { state: { latitud: report.latitud, longitud: report.longitud } })}
+      className="cursor-pointer overflow-hidden rounded-2xl border border-[#143624]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+    >
       <div className="relative h-44 bg-[#dce9df]">
         {report.imagen ? (
           <img

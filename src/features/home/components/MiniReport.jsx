@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
+
 export default function MiniReport({ report }) {
+  const navigate = useNavigate();
   return (
-    <article className="overflow-hidden rounded-xl bg-white shadow-lg">
+    <article
+      onClick={() => navigate(`/reportes/${report.id}`, { state: { latitud: report.latitud, longitud: report.longitud } })}
+      className="cursor-pointer overflow-hidden rounded-xl bg-white shadow-lg"
+    >
       <div className="h-28 bg-[#dce9df]">
         {report.photo ? (
           <img

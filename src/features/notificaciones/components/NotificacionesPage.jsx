@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/context/authContext";
 import { useNotificaciones } from "../hooks/useNotificaciones";
 import NotificacionCard from "./NotificacionCard";
-import NotificacionDetalleModal from "./NotificacionDetalleModal";
 
 function BellIcon() {
     return (
@@ -32,7 +32,7 @@ const FILTROS = [
 
 export default function NotificacionesPage() {
     const { user } = useAuth();
-    const [notificacionSeleccionada, setNotificacionSeleccionada] = useState(null);
+    const navigate = useNavigate();
 
     const {
         notificaciones,
@@ -45,6 +45,34 @@ export default function NotificacionesPage() {
         leerTodas,
         eliminar,
     } = useNotificaciones();
+
+    function handleNotificacionClick(notificacion) {
+        if (!notificacion.leida) leerUna(notificacion.id);
+
+        if (notificacion.tipo === "COINCIDENCIA_POTENCIAL") {
+            const idPropio = notificacion.idReporte ?? notificacion.id_reporte;
+            const idCoincidencia = notificacion.idReporteCoincidencia ?? notificacion.id_reporte_coincidencia;
+            const destino = idCoincidencia ?? idPropio;
+            const params = new URLSearchParams({ tipo: "COINCIDENCIA_POTENCIAL" });
+            if (idPropio && idCoincidencia) {
+                params.set("idReporteMio", String(idPropio));
+                const todasCoincidencias = notificaciones
+                    .filter(n =>
+                        n.tipo === "COINCIDENCIA_POTENCIAL" &&
+                        (n.idReporte ?? n.id_reporte) === idPropio &&
+                        (n.idReporteCoincidencia ?? n.id_reporte_coincidencia)
+                    )
+                    .map(n => String(n.idReporteCoincidencia ?? n.id_reporte_coincidencia));
+                if (todasCoincidencias.length > 1) {
+                    params.set("coincidencias", todasCoincidencias.join(","));
+                }
+            }
+            navigate(`/reportes/${destino}?${params.toString()}`);
+        } else {
+            const idReporte = notificacion.idReporte ?? notificacion.id_reporte;
+            navigate(`/reportes/${idReporte}`);
+        }
+    }
 
     if (!user) {
         return (
@@ -138,7 +166,7 @@ export default function NotificacionesPage() {
                                 notificacion={n}
                                 onLeer={leerUna}
                                 onEliminar={eliminar}
-                                onClickCard={setNotificacionSeleccionada}
+                                onClickCard={handleNotificacionClick}
                             />
                         ))}
                     </div>
@@ -146,13 +174,6 @@ export default function NotificacionesPage() {
             </div>
         </div>
 
-        {notificacionSeleccionada && (
-            <NotificacionDetalleModal
-                notificacion={notificacionSeleccionada}
-                onClose={() => setNotificacionSeleccionada(null)}
-                onLeer={leerUna}
-            />
-        )}
         </div>
     );
 }

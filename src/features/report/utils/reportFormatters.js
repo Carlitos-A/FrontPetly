@@ -23,6 +23,8 @@ export function normalizeReportPreview(report) {
       "Sector no informado",
     photo: report.photo || report.imagenUrl || report.imagen_url || "",
     timeLabel: formatTime(report.fechaReporte || report.fecha_reporte || report.reportedAt),
+    latitud: report.latitud,
+    longitud: report.longitud,
   };
 }
 
