@@ -123,7 +123,7 @@ export default function Header() {
                                 {/* Dropdown */}
                                 <div
                                     className={`absolute right-0 mt-2 w-52 rounded-xl border border-white/10 shadow-xl z-50
-                bg-black/60 backdrop-blur-lg
+                bg-black backdrop-blur-lg
                 transition-all duration-200 origin-top-right
                 ${open ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none "}`}
                                 >
@@ -210,8 +210,8 @@ export default function Header() {
                 <div className="md:hidden bg-black/1 backdrop-blur border-t border-white/10 px-4 py-4 flex flex-col gap-4 ">
                     <ul className="flex flex-col gap-2 text-white text-sm">
                         <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/">Home</Link></li>
-                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/servicios">Servicios</Link></li>
-                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/contacto">Contacto</Link></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/Mapa">Mapa</Link></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/Reportes">Reportes</Link></li>
                     </ul>
 
                     <div className="border-t border-white/10 pt-3">

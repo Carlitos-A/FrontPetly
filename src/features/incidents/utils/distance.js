@@ -1,19 +1,22 @@
-export function getDistanceFromReference(referenceLocation, pet) {
+export function getDistanceFromReference(referenceLocation, item) {
   const refLat = Number(referenceLocation?.latitud);
   const refLng = Number(referenceLocation?.longitud);
-  const petLat = Number(pet.latitud);
-  const petLng = Number(pet.longitud);
+
+  const lat = Number(item?.latitud ?? item?.lat ?? item?.latitude);
+  const lng = Number(item?.longitud ?? item?.lng ?? item?.lon ?? item?.longitude);
 
   if (
     Number.isFinite(refLat) &&
     Number.isFinite(refLng) &&
-    Number.isFinite(petLat) &&
-    Number.isFinite(petLng)
+    Number.isFinite(lat) &&
+    Number.isFinite(lng)
   ) {
-    return haversineDistance(refLat, refLng, petLat, petLng);
+    return haversineDistance(refLat, refLng, lat, lng);
   }
 
-  return Number.isFinite(pet.distance) ? pet.distance : null;
+  const distance = Number(item?.distance ?? item?.distancia);
+
+  return Number.isFinite(distance) ? distance : null;
 }
 
 export function comparePetsByDistance(referenceLocation) {

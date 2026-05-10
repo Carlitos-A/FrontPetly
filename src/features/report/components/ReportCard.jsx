@@ -2,6 +2,19 @@ function getReportValue(report, camelKey, snakeKey, fallback = "Sin información
   return report[camelKey] || report[snakeKey] || fallback;
 }
 
+const TIPO_MASCULINO = {
+  PERDIDA: "perdido",
+  PERDIDO: "perdido",
+  ENCONTRADA: "encontrado",
+  ENCONTRADO: "encontrado",
+  AVISTAMIENTO: "avistado",
+  AVISTADO: "avistado",
+};
+
+function tipoMasculino(tipo) {
+  return TIPO_MASCULINO[tipo?.toUpperCase()] ?? tipo?.toLowerCase() ?? "reporte";
+}
+
 function formatDate(value) {
   if (!value) return "Sin fecha";
 
@@ -18,12 +31,12 @@ function formatDate(value) {
 
 export default function MiReporteCard({ report }) {
   const reportType = getReportValue(report, "tipoReporte", "tipo_reporte", "Reporte");
-  const reportStatus = getReportValue(report, "estadoReporte", "estado_reporte", "Activo");
   const petStatus = getReportValue(report, "estadoMascota", "estado_mascota");
   const imageUrl = getReportValue(report, "imagenUrl", "imagen_url", "");
   const color = getReportValue(report, "colorPrincipal", "color_principal");
   const approximateAge = getReportValue(report, "edadAproximada", "edad_aproximada");
   const reportDate = getReportValue(report, "fechaReporte", "fecha_reporte", "");
+  const petName = report.nombre || report.nombreMascota || report.nombre_mascota || null;
 
   return (
     <article className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-[#5DCAA5]/40 hover:shadow-xl">
@@ -31,8 +44,8 @@ export default function MiReporteCard({ report }) {
         {imageUrl ? (
           <img
             src={imageUrl}
-            alt={report.nombre || reportType}
-            className="h-full w-full object-cover"
+            alt={petName || reportType}
+            className="h-full w-full object-contain"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-5xl text-white/50">
@@ -49,11 +62,11 @@ export default function MiReporteCard({ report }) {
         <div>
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-lg font-bold text-white">
-              {report.nombre || "Mascota sin nombre"}
+              {petName || `${report.especie ? report.especie.charAt(0).toUpperCase() + report.especie.slice(1).toLowerCase() : "Mascota"} ${tipoMasculino(reportType)}`}
             </h3>
-            <span className="rounded-full border border-white/10 bg-white/10 px-2 py-1 text-[11px] text-white/70">
+            {/* <span className="rounded-full border border-white/10 bg-white/10 px-2 py-1 text-[11px] text-white/70">
               {reportStatus}
-            </span>
+            </span> */}
           </div>
           <p className="mt-1 text-xs text-white/50">
             Publicado: {formatDate(reportDate)}
