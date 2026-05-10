@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ubicacionCoord2 } from "../../map/services/ubicacionService";
+import { ubicacionCoord } from "../../map/services/ubicacionService";
 
 
 const SPECIES_EMOJI = { dog: "🐕", cat: "🐈", other: "🐾" };
@@ -10,16 +10,20 @@ const REPORT_STYLES = {
 };
 
 export default function ReportDetail({ report, onBack }) {
-  if (!report) return null;
+  const imageUrl = report?.photo || report?.imagen_url;
+  const title = report?.name || report?.tipoReporte || "Detalle del reporte";
+  const reportStyle =
+    REPORT_STYLES[report?.tipoReporte] || "bg-white/10 text-white/70 border-white/20";
 
-  const imageUrl = report.photo || report.imagen_url;
-  const title =  report.name || report.tipoReporte || "Detalle del reporte";
-  const reportStyle = REPORT_STYLES[report.tipoReporte] || "bg-white/10 text-white/70 border-white/20";
-  const locationFallback = getReportLocationText(report);
-  
-  const [ubicacion, setUbicacion] = useState(locationFallback || "Cargando ubicación...");
+  const locationFallback = report ? getReportLocationText(report) : "";
+
+  const [ubicacion, setUbicacion] = useState(
+    locationFallback || "Cargando ubicación..."
+  );
 
   useEffect(() => {
+    if (!report) return;
+
     const controller = new AbortController();
 
     function formatearDireccion(direccion) {
@@ -36,26 +40,30 @@ export default function ReportDetail({ report, onBack }) {
       }
 
       try {
-        const place = await ubicacionCoord2(
+        const place = await ubicacionCoord(
           report.latitud,
           report.longitud,
           controller.signal
         );
 
         const formattedPlace = formatearDireccion(place);
-        setUbicacion(isMissingLocation(formattedPlace) ? locationFallback || formattedPlace : formattedPlace);
+
+        setUbicacion(
+          isMissingLocation(formattedPlace)
+            ? locationFallback || formattedPlace
+            : formattedPlace
+        );
       } catch {
         setUbicacion("Ubicación no disponible");
       }
     }
 
-
     cargarUbicacion();
 
     return () => controller.abort();
-  }, [report.latitud, report.longitud, locationFallback]);
+  }, [report, report?.latitud, report?.longitud, locationFallback]);
 
-
+  if (!report) return null;
 
 
   return (
