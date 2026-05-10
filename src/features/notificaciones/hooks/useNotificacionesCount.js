@@ -7,8 +7,7 @@ export function useNotificacionesCount() {
     const fetchCount = useCallback(async () => {
         const token = localStorage.getItem("token");
         if (!token) return;
-        const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
-        const result = await getContadorNoLeidas(usuario.run);
+        const result = await getContadorNoLeidas();
         if (result.success) {
             setCount(result.data?.noLeidas ?? 0);
         }
