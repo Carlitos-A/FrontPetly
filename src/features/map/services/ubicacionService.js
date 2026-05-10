@@ -35,22 +35,6 @@ export async function ubicacionCoord(lat, lng, signal) {
   }
 }
 
-function formatearUbicacion(feature) {
-  if (!feature) return "Ubicación no informada";
-
-  const calle = feature.text;
-
-  const comuna =
-    feature.context?.find((item) => item.id?.startsWith("locality"))?.text ||
-    feature.context?.find((item) => item.id?.startsWith("place"))?.text ||
-    feature.context?.find((item) => item.id?.startsWith("region"))?.text;
-
-  const partes = [calle, comuna].filter(Boolean);
-
-  return partes.length > 0
-    ? partes.join(", ")
-    : feature.place_name || "Ubicación no informada";
-}
 
 export async function ubicacionCoord2(lat, lng, signal) {
   const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -82,9 +66,51 @@ export async function ubicacionCoord2(lat, lng, signal) {
     const data = await response.json();
     const feature = data.features?.[0];
 
-    return feature?.place_name || "Ubicación no informada";
+    return formatearUbicacion2(feature) || "Ubicación no informada";
   } catch (error) {
     if (error.name === "AbortError") throw error;
     return "Ubicación no informada";
   }
+}
+
+function formatearUbicacion(feature) {
+  if (!feature) return "Ubicación no informada";
+
+  const calle = feature.text;
+
+  const comuna =
+    feature.context?.find((item) => item.id?.startsWith("locality"))?.text ||
+    feature.context?.find((item) => item.id?.startsWith("place"))?.text ||
+    feature.context?.find((item) => item.id?.startsWith("region"))?.text;
+
+  const partes = [calle, comuna].filter(Boolean);
+
+  return partes.length > 0
+    ? partes.join(", ")
+    : feature.place_name || "Ubicación no informada";
+}
+
+function formatearUbicacion2(feature) {
+  if (!feature) return "Ubicación no informada";
+
+  const calle = quitarNumeroCalle(feature.text);
+
+  const comuna =
+    feature.context?.find((item) => item.id?.startsWith("locality"))?.text ||
+    feature.context?.find((item) => item.id?.startsWith("place"))?.text ||
+    feature.context?.find((item) => item.id?.startsWith("region"))?.text;
+
+  const partes = [calle, comuna].filter(Boolean);
+
+  return partes.length > 0
+    ? partes.join(", ")
+    : feature.place_name || "Ubicación no informada";
+}
+
+function quitarNumeroCalle(calle) {
+  if (!calle) return "";
+
+  return calle
+    .replace(/\s+\d+[A-Za-z]?(?:-\d+)?$/, "")
+    .trim();
 }
