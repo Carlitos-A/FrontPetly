@@ -96,7 +96,6 @@ export default function Home() {
   return (
 
     <div className="flex flex-col md:flex-row h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
-      {/*Este mapa esta comentado debido a que me ayuda a no usar de manera innecesaria la capacidad gratis de mapbox, pero en este caso me encantaria que este mapa abarcara la mitad de la pantalla también*/}
       <div className="w-full md:w-1/2 h-75 md:h-full">
         <Map
           filters={filters}
