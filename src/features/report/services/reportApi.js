@@ -34,7 +34,7 @@ export async function createReport(data, tipoReporte) {
 
 
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   const res = await fetch(`${API_URL}/petly/reportes`, {
     method: "POST",

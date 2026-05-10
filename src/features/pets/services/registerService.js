@@ -2,7 +2,7 @@ export async function registerService(Data) {
     try {
 
         const data = new FormData();
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
 
         data.append(
             "data",

@@ -2,7 +2,7 @@ const MASCOTAS_BASE_URL =
     import.meta.env.VITE_MASCOTAS_BASE_URL || "http://localhost:8080/petly/mascotas";
 
 export async function getMisMascotas(runCandidates) {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const runs = Array.isArray(runCandidates)
         ? runCandidates
         : [runCandidates].filter(Boolean);

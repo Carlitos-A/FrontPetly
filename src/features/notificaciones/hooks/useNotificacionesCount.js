@@ -5,7 +5,7 @@ export function useNotificacionesCount() {
     const [count, setCount] = useState(0);
 
     const fetchCount = useCallback(async () => {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (!token) return;
         const result = await getContadorNoLeidas();
         if (result.success) {

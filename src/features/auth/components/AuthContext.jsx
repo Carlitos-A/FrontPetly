@@ -6,20 +6,20 @@ import { AuthContext } from "../context/authContext";
 export function AuthProvider({ children }) {
 
     const [user, setUser] = useState(() => {
-        const storedUser = localStorage.getItem("usuario");
+        const storedUser = sessionStorage.getItem("usuario");
         return storedUser ? JSON.parse(storedUser) : null;
     });
 
 
     const login = (userData, token) => {
-        localStorage.setItem("token", token);
-        localStorage.setItem("usuario", JSON.stringify(userData));
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("usuario", JSON.stringify(userData));
         setUser(userData);
     };
 
     const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("usuario");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("usuario");
         setUser(null);
     };
 

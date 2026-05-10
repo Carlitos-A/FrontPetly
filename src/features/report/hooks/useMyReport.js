@@ -85,14 +85,14 @@ function firstValue(values) {
 
 function getStoredUser() {
   try {
-    return JSON.parse(localStorage.getItem("usuario") || "null");
+    return JSON.parse(sessionStorage.getItem("usuario") || "null");
   } catch {
     return null;
   }
 }
 
 function getTokenPayload() {
-  const payload = localStorage.getItem("token")?.split(".")?.[1];
+  const payload = sessionStorage.getItem("token")?.split(".")?.[1];
   if (!payload) return null;
 
   try {

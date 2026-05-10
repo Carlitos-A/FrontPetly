@@ -2,7 +2,7 @@ const REPORTES_BASE_URL =
   import.meta.env.VITE_REPORTES_BASE_URL || "http://localhost:8080/petly/reportes";
 
 function getToken() {
-  return localStorage.getItem("token");
+  return sessionStorage.getItem("token");
 }
 
 export async function getReportService(runCandidates) {
