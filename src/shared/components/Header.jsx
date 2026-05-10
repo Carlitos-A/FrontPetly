@@ -104,7 +104,7 @@ export default function Header() {
                             <button
                                 type="button"
                                 onClick={toggleBell}
-                                className="relative flex h-9 items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-2.5 text-white transition-all hover:bg-white/20 hover:text-[#5DCAA5] focus:outline-none focus:ring-2 focus:ring-[#5DCAA5]/50"
+                                className="relative cursor-pointer flex h-9 items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-2.5 text-white transition-all hover:bg-white/20 hover:text-[#5DCAA5] focus:outline-none focus:ring-2 focus:ring-[#5DCAA5]/50"
                                 aria-label="Notificaciones"
                                 aria-expanded={bellOpen}
                             >
