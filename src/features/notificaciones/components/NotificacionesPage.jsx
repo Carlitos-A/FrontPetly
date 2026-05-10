@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useAuth } from "../../auth/context/authContext";
 import { useNotificaciones } from "../hooks/useNotificaciones";
 import NotificacionCard from "./NotificacionCard";
+import NotificacionDetalleModal from "./NotificacionDetalleModal";
 
 function BellIcon() {
     return (
@@ -30,6 +32,7 @@ const FILTROS = [
 
 export default function NotificacionesPage() {
     const { user } = useAuth();
+    const [notificacionSeleccionada, setNotificacionSeleccionada] = useState(null);
 
     const {
         notificaciones,
@@ -55,6 +58,7 @@ export default function NotificacionesPage() {
     }
 
     return (
+        <>
         <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 pb-12 px-4">
             <div className="mx-auto max-w-2xl">
 
@@ -134,11 +138,21 @@ export default function NotificacionesPage() {
                                 notificacion={n}
                                 onLeer={leerUna}
                                 onEliminar={eliminar}
+                                onClickCard={setNotificacionSeleccionada}
                             />
                         ))}
                     </div>
                 )}
             </div>
         </div>
+
+        {notificacionSeleccionada && (
+            <NotificacionDetalleModal
+                notificacion={notificacionSeleccionada}
+                onClose={() => setNotificacionSeleccionada(null)}
+                onLeer={leerUna}
+            />
+        )}
+        </>
     );
 }

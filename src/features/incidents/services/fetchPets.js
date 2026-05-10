@@ -72,6 +72,22 @@ function filterPets(pets, filters) {
     });
 }
 
+export async function fetchPetById(id) {
+    if (USE_MOCK) {
+        const pet = mockPets.find(p => String(p.id) === String(id));
+        return pet ? normalizePets([pet])[0] : null;
+    }
+    try {
+        const res = await fetch(`${REPORTS_API_URL}/${id}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        return normalizePets([data])[0];
+    } catch (error) {
+        console.warn("Error al obtener reporte:", error);
+        return null;
+    }
+}
+
 export async function fetchPets(filters = {}) {
     if (USE_MOCK) {
         return filterPets(mockPets, filters);

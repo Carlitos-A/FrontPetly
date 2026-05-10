@@ -17,7 +17,7 @@ export function useNotificaciones() {
         setError(null);
         const result = await getMisNotificaciones();
         if (result.success) {
-            setNotificaciones(Array.isArray(result.data) ? result.data : []);
+setNotificaciones(Array.isArray(result.data) ? result.data : []);
         } else {
             setError(result.error);
         }
