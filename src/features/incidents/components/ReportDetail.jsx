@@ -1,3 +1,7 @@
+import { useEffect, useState } from "react";
+import { ubicacionCoord2 } from "../../map/services/ubicacionService";
+
+
 const SPECIES_EMOJI = { dog: "🐕", cat: "🐈", other: "🐾" };
 const REPORT_STYLES = {
   PERDIDA: "bg-red-500/20 text-red-300 border-red-400/30",
@@ -9,8 +13,50 @@ export default function ReportDetail({ report, onBack }) {
   if (!report) return null;
 
   const imageUrl = report.photo || report.imagen_url;
-  const title = report.estadoReporte || report.name || report.tipoReporte || "Detalle del reporte";
+  const title =  report.name || report.tipoReporte || "Detalle del reporte";
   const reportStyle = REPORT_STYLES[report.tipoReporte] || "bg-white/10 text-white/70 border-white/20";
+  const locationFallback = getReportLocationText(report);
+  
+  const [ubicacion, setUbicacion] = useState(locationFallback || "Cargando ubicación...");
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    function formatearDireccion(direccion) {
+      if (!direccion) return "Ubicación no disponible";
+
+      const partes = direccion.split(",");
+      return partes.slice(0, 2).join(",").trim();
+    }
+
+    async function cargarUbicacion() {
+      if (!hasCoordinates(report)) {
+        setUbicacion(locationFallback || "Sin ubicación");
+        return;
+      }
+
+      try {
+        const place = await ubicacionCoord2(
+          report.latitud,
+          report.longitud,
+          controller.signal
+        );
+
+        const formattedPlace = formatearDireccion(place);
+        setUbicacion(isMissingLocation(formattedPlace) ? locationFallback || formattedPlace : formattedPlace);
+      } catch {
+        setUbicacion("Ubicación no disponible");
+      }
+    }
+
+
+    cargarUbicacion();
+
+    return () => controller.abort();
+  }, [report.latitud, report.longitud, locationFallback]);
+
+
+
 
   return (
     <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl shadow-black/20 backdrop-blur-xl">
@@ -65,7 +111,6 @@ export default function ReportDetail({ report, onBack }) {
               <DetailItem label="Tamaño" value={report.size} />
               <DetailItem label="Sexo" value={report.sex} />
               <DetailItem label="Edad aprox." value={report.approximateAge} />
-              <DetailItem label="Estado reporte" value={report.estadoReporte} />
             </div>
           </section>
 
@@ -74,8 +119,7 @@ export default function ReportDetail({ report, onBack }) {
             <div className="grid gap-3 sm:grid-cols-2">
               <DetailItem label="ID reporte" value={report.id} />
               <DetailItem label="Fecha" value={formatDate(report.fechaReporte)} />
-              <DetailItem label="Latitud" value={report.latitud} />
-              <DetailItem label="Longitud" value={report.longitud} />
+              <DetailItem label="Ubicacion" value={ubicacion} />
             </div>
           </section>
 
@@ -97,6 +141,22 @@ function DetailItem({ label, value }) {
     </div>
   );
 }
+
+function getReportLocationText(report) {
+  return report.sector || report.comuna || report.ubicacion || report.direccion || report.resolvedPlace || "";
+}
+
+function hasCoordinates(report) {
+  const latitude = Number(report.latitud);
+  const longitude = Number(report.longitud);
+
+  return Number.isFinite(latitude) && Number.isFinite(longitude);
+}
+
+function isMissingLocation(value) {
+  return !value || value === "Ubicación no informada" || value === "Ubicación no disponible";
+}
+
 
 function formatDate(date) {
   if (!date) return "Sin información";

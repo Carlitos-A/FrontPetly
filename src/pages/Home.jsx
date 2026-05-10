@@ -270,7 +270,7 @@ function ReportPreview({ report }) {
 
       <div className="p-3">
         <h3 className="line-clamp-1 text-base font-black text-[#102218]">
-          {report.title}
+          {report.speciesLabel}
         </h3>
         <p className="mt-1 text-sm font-semibold text-[#102218]/62">
           {report.breed || report.speciesLabel}
@@ -300,7 +300,7 @@ function MiniReport({ report }) {
       <div className="p-3">
         <p className="text-xs font-black text-[#2f7f5a]">{report.typeLabel}</p>
         <h3 className="mt-1 line-clamp-1 text-sm font-black text-[#102218]">
-          {report.title}
+          {report.speciesLabel}
         </h3>
         <p className="mt-1 text-xs font-semibold text-[#102218]/60">{report.sector}</p>
       </div>
@@ -309,11 +309,11 @@ function MiniReport({ report }) {
 }
 
 function normalizeReport(report) {
-  const type = report.tipoReporte || report.tipo_reporte || report.status || "REPORTE";
+  const type = report.tipoReporte || report.tipo_reporte || "REPORTE";
   const normalizedType = String(type).toUpperCase();
 
   return {
-    id: report.id || report.idreporte || report.estadoReporte || report.name,
+    id: report.id || report.idreporte || report.name,
     title:
       report.estadoReporte ||
       report.estado_reporte ||
@@ -400,9 +400,6 @@ function getReadablePlace(feature) {
   if (!feature) return "";
 
   const street = feature.text;
-  const neighborhood = feature.context?.find((item) =>
-    item.id?.startsWith("neighborhood")
-  )?.text;
   const locality = feature.context?.find((item) =>
     item.id?.startsWith("locality")
   )?.text;

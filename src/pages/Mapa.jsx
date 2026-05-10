@@ -174,14 +174,15 @@ function normalizeMapReport(report) {
     sex: report.sexo,
     approximateAge: report.edadAproximada || report.edad_aproximada,
     tipoReporte: report.tipoReporte || report.tipo_reporte,
-    status: report.estadoMascota || report.estado_mascota,
     description: report.descripcion,
     contacto: report.contacto,
     photo: report.photo || report.imagenUrl || report.imagen_url,
     imagen_url: report.imagenUrl || report.imagen_url,
-    latitud: report.latitud,
-    longitud: report.longitud,
-    fechaReporte: report.fechaReporte || report.fecha_reporte,
-    estadoReporte: report.estadoReporte || report.estado_reporte,
+    latitud: report.latitud || report.lat || report.latitude,
+    longitud: report.longitud || report.lng || report.lon || report.longitude,
+    sector: report.sector,
+    comuna: report.comuna,
+    ubicacion: report.ubicacion || report.direccion || report.resolvedPlace,
+    fechaReporte: report.fechaReporte || report.fecha_reporte
   };
 }

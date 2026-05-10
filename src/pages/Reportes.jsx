@@ -204,7 +204,7 @@ function ReportCard({ report }) {
 
       <div className="space-y-4 p-4">
         <div>
-          <h2 className="line-clamp-1 text-lg font-black text-[#102218]">
+          <h2 className="line-clamp-2 text-lg font-black text-[#102218]">
             {report.titulo}
           </h2>
           <p className="mt-1 text-xs font-bold text-[#102218]/45">
@@ -222,7 +222,7 @@ function ReportCard({ report }) {
         </div>
 
         <div className="rounded-xl bg-[#f7faf6] p-3 text-xs font-semibold leading-5 text-[#102218]/68">
-          <p className="font-black text-[#2f7f5a]">{report.ubicacion}</p>
+          <p className="font-black text-[#2f7f5a]">Descripción</p>
           <p className="mt-2 line-clamp-3">{report.descripcion}</p>
         </div>
 
@@ -263,8 +263,7 @@ function normalizeReport(report) {
       report.idreporte ||
       `${tipoReporte}-${report.fechaReporte || report.fecha_reporte || Math.random()}`,
     titulo:
-      report.estadoReporte ||
-      report.estado_reporte ||
+    report.resolvedPlace ||
       report.nombre ||
       formatType(tipoReporte),
     tipoReporte,
@@ -365,7 +364,7 @@ function getReadablePlace(feature) {
 }
 
 function getTextPlace(report) {
-  return report.sector || report.comuna || report.ubicacion || report.resolvedPlace;
+  return report.ubicacion || report.resolvedPlace;
 }
 
 function hasCoordinates(report) {
