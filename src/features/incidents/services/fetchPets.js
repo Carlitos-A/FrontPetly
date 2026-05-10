@@ -1,4 +1,6 @@
 import { mockPets } from "../data/MockPets";
+import { normalizeReport } from "../utils/normalizeReport";
+
 const USE_MOCK = import.meta.env.VITE_USE_MOCKS === "true";
 const REPORTS_API_URL = import.meta.env.VITE_REPORTS_MAP_URL || "http://localhost:8080/petly/reportes";
 const REPORTS_BY_TYPE_API_URL = `${REPORTS_API_URL}/filtrar/tipo`;
@@ -24,26 +26,7 @@ function buildReportsUrl(filters = {}) {
 }
 
 function normalizePets(data) {
-    return data.map((pet) => ({
-        id: pet.id || pet.idreporte,
-        name: pet.nombre || pet.tipoReporte || pet.tipo_reporte || "Sin nombre",
-        species: pet.especie,
-        breed: pet.raza,
-        color: pet.colorPrincipal || pet.color_principal,
-        size: pet.tamanio,
-        sex: pet.sexo,
-        approximateAge: pet.edadAproximada || pet.edad_aproximada,
-        tipoReporte: pet.tipoReporte || pet.tipo_reporte,
-        status: pet.estadoMascota || pet.estado_mascota,
-        description: pet.descripcion,
-        contacto: pet.contacto,
-        photo: pet.photo || pet.imagenUrl || pet.imagen_url,
-        imagen_url: pet.imagenUrl || pet.imagen_url,
-        latitud: pet.latitud,
-        longitud: pet.longitud,
-        fechaReporte: pet.fechaReporte || pet.fecha_reporte,
-        estadoReporte: pet.estadoReporte || pet.estado_reporte,
-    }));
+  return data.map(normalizeReport);
 }
 
 function filterPets(pets, filters) {
