@@ -1,5 +1,6 @@
 import { useLoginForm } from "../hooks/useLoginForm";
 import Field from "../../../shared/components/Field";
+import herologinImg from "../../../assets/herologin.jpg";
 
 export default function LoginForm() {
     const {
@@ -82,7 +83,7 @@ export default function LoginForm() {
             {/* PANEL DERECHO (IMAGEN) */}
             <div className="hidden md:flex md:w-[45%] items-center justify-center p-10 relative overflow-hidden bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
                 <img
-                    src="src/assets/herologin.jpg"
+                    src={herologinImg}
                     alt="Login"
                     className="w-full h-full object-contain rounded-xl"
                 />

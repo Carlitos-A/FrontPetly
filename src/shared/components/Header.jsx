@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useAuth } from "../../features/auth/context/authContext";
 import { Link } from "react-router-dom";
+import logoImg from "../../assets/logo.png";
+import pfpImg from "../../assets/pfp.jpg";
 import { useNotificacionesCount } from "../../features/notificaciones/hooks/useNotificacionesCount";
 import { useNotificaciones } from "../../features/notificaciones/hooks/useNotificaciones";
 
@@ -20,6 +22,7 @@ function formatNotificationDate(fechaStr) {
 
     return fecha.toLocaleDateString("es-CL", { day: "numeric", month: "short" });
 }
+
 
 export default function Header() {
     const { user, logout } = useAuth();
@@ -79,7 +82,7 @@ export default function Header() {
                 {/* IZQUIERDA */}
                 <div className="flex items-center">
                     <a href="/" className="flex items-center gap-2">
-                        <img src="src/assets/logo.png" className="h-7" alt="Logo" />
+                        <img src={logoImg} className="h-7" alt="Logo" />
                         <span className="text-white text-xl font-semibold">
                             Petly
                         </span>
@@ -213,7 +216,7 @@ export default function Header() {
                                     </span>
 
                                     <img
-                                        src={"src/assets/pfp.jpg"}
+                                        src={pfpImg}
                                         alt="avatar"
                                         className="w-8 h-8 rounded-full object-cover border border-white/20"
                                     />
@@ -222,7 +225,7 @@ export default function Header() {
                                 {/* Dropdown */}
                                 <div
                                     className={`absolute right-0 mt-2 w-52 rounded-xl border border-white/10 shadow-xl z-50
-                bg-black/60 backdrop-blur-lg
+                bg-black backdrop-blur-lg
                 transition-all duration-200 origin-top-right
                 ${open ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none "}`}
                                 >
@@ -309,8 +312,8 @@ export default function Header() {
                 <div className="md:hidden bg-black/1 backdrop-blur border-t border-white/10 px-4 py-4 flex flex-col gap-4 ">
                     <ul className="flex flex-col gap-2 text-white text-sm">
                         <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/">Home</Link></li>
-                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/servicios">Servicios</Link></li>
-                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/contacto">Contacto</Link></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/Mapa">Mapa</Link></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/Reportes">Reportes</Link></li>
                     </ul>
 
                     <div className="border-t border-white/10 pt-3">
@@ -326,7 +329,7 @@ export default function Header() {
                         ) : (
                             <div className="flex flex-col gap-2 text-sm text-white">
                                 <div className="flex items-center gap-3 pb-2 border-b border-white/10">
-                                    <img src="src/assets/pfp.jpg" alt="avatar" className="w-8 h-8 rounded-full object-cover border border-white/20" />
+                                    <img src={pfpImg} alt="avatar" className="w-8 h-8 rounded-full object-cover border border-white/20" />
                                     <div>
                                         <p className="font-medium">{user.nombre}</p>
                                         <p className="text-white/50 text-xs">{user.correo}</p>

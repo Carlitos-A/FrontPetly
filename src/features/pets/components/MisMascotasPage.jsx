@@ -14,7 +14,7 @@ import MisMascotasGrid from "./MisMascotasGrid";
     }
 
       return (
-    <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] px-4 pb-12 pt-20">
+    <div className="h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] px-4 pb-12 pt-20">
       <section className="mx-auto flex w-full max-w-6xl flex-col items-center gap-8">
         <div className="w-full rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-xl backdrop-blur-xl md:p-8">
           <p className="text-sm uppercase tracking-[0.3em] text-[#5DCAA5]">

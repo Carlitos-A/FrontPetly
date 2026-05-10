@@ -279,10 +279,6 @@ function showReportPopup(map, feature, popupRef) {
         </button>
     </div>
 
-    <p class="text-xs mt-2">
-        <span class="font-medium">Estado:</span> ${props.estado_mascota || props.estadoMascota || "Sin estado"}
-    </p>
-
     <div class="grid grid-cols-2 gap-x-3 gap-y-1 mt-2 text-xs">
         <p><span class="font-medium">Especie:</span> ${props.especie || "Sin dato"}</p>
         <p><span class="font-medium">Raza:</span> ${props.raza || "Sin dato"}</p>
@@ -309,14 +305,11 @@ function filterReports(reports = [], filters = {}) {
 
     return reports.filter((report) => {
         if (tipoReporte && report.tipoReporte !== tipoReporte && report.tipo_reporte !== tipoReporte) return false;
-        if (filters.estado && report.estadoReporte !== filters.estado && report.estado_reporte !== filters.estado) return false;
         if (filters.search) {
             const searchableText = [
                 report.nombre,
                 report.tipoReporte,
                 report.tipo_reporte,
-                report.estadoMascota,
-                report.estado_mascota,
                 report.especie,
                 report.raza,
                 report.colorPrincipal,

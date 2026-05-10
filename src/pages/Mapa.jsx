@@ -80,7 +80,7 @@ export default function Home() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
+      <div className="h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
         <AuthGuardModal
           open={mapGuardOpen}
           onClose={() => {
@@ -95,9 +95,9 @@ export default function Home() {
 
   return (
 
-    <div className="flex flex-col md:flex-row min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
+    <div className="flex flex-col md:flex-row h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
       {/*Este mapa esta comentado debido a que me ayuda a no usar de manera innecesaria la capacidad gratis de mapbox, pero en este caso me encantaria que este mapa abarcara la mitad de la pantalla también*/}
-      <div className="w-full md:w-1/2 md:h-[calc(100vh-3rem)] h-75 md:sticky md:top-12">
+      <div className="w-full md:w-1/2 h-75 md:h-full">
         <Map
           filters={filters}
           selectedReportId={selectedReportId}
@@ -174,14 +174,15 @@ function normalizeMapReport(report) {
     sex: report.sexo,
     approximateAge: report.edadAproximada || report.edad_aproximada,
     tipoReporte: report.tipoReporte || report.tipo_reporte,
-    status: report.estadoMascota || report.estado_mascota,
     description: report.descripcion,
     contacto: report.contacto,
     photo: report.photo || report.imagenUrl || report.imagen_url,
     imagen_url: report.imagenUrl || report.imagen_url,
-    latitud: report.latitud,
-    longitud: report.longitud,
-    fechaReporte: report.fechaReporte || report.fecha_reporte,
-    estadoReporte: report.estadoReporte || report.estado_reporte,
+    latitud: report.latitud || report.lat || report.latitude,
+    longitud: report.longitud || report.lng || report.lon || report.longitude,
+    sector: report.sector,
+    comuna: report.comuna,
+    ubicacion: report.ubicacion || report.direccion || report.resolvedPlace,
+    fechaReporte: report.fechaReporte || report.fecha_reporte
   };
 }
