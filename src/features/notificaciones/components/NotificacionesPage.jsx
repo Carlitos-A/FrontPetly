@@ -55,8 +55,8 @@ export default function NotificacionesPage() {
     }
 
     return (
-        <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 pb-12 px-4">
-            <div className="mx-auto max-w-2xl">
+        <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 pb-6 px-4">
+            <div className="mx-auto flex max-w-2xl flex-col">
 
                 {/* Encabezado */}
                 <div className="mb-6 flex items-center justify-between">
@@ -105,8 +105,9 @@ export default function NotificacionesPage() {
                 </div>
 
                 {/* Contenido */}
+                <div className="max-h-[calc(100vh-260px)] overflow-y-auto pr-2">
                 {loading ? (
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3 pb-4">
                         {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
                     </div>
                 ) : error ? (
@@ -138,6 +139,7 @@ export default function NotificacionesPage() {
                         ))}
                     </div>
                 )}
+                </div>
             </div>
         </div>
     );
