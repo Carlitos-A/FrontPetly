@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchPetById } from "../../incidents/services/fetchPets";
-
-const SPECIES_EMOJI = { dog: "🐕", cat: "🐈", other: "🐾" };
+import PawIcon from "../../../shared/components/PawIcon";
 const REPORT_STYLES = {
     PERDIDA: "bg-red-500/20 text-red-300 border-red-400/30",
     ENCONTRADA: "bg-[#5DCAA5]/20 text-[#5DCAA5] border-[#5DCAA5]/30",
@@ -41,7 +40,7 @@ function StepDetalle({ reporte, esCoincidencia, onVerCoincidencia }) {
                     />
                 ) : (
                     <div className="flex h-52 items-center justify-center sm:h-64">
-                        <span className="select-none text-7xl">{SPECIES_EMOJI[reporte.species] ?? "🐾"}</span>
+                        <PawIcon size="large" />
                     </div>
                 )}
             </div>
@@ -150,7 +149,7 @@ function StepCoincidencia({ reporte, onConfirmar, onRechazar, accionLoading, res
                         <img src={imageUrl} alt="Mascota" className="h-full w-full object-cover" />
                     ) : (
                         <div className="flex h-full items-center justify-center">
-                            <span className="text-3xl">{SPECIES_EMOJI[reporte.species] ?? "🐾"}</span>
+                            <PawIcon />
                         </div>
                     )}
                 </div>
