@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8086";
+const API_URL = "http://localhost:8080";
 
 function bearerHeader() {
     const token = localStorage.getItem("token");
@@ -17,9 +17,9 @@ export async function getMisNotificaciones() {
     }
 }
 
-export async function getContadorNoLeidas() {
+export async function getContadorNoLeidas(idUsuario) {
     try {
-        const res = await fetch(`${API_URL}/petly/notificaciones/contador`, {
+        const res = await fetch(`${API_URL}/petly/notificaciones/usuario/${idUsuario}/contador`, {
             headers: bearerHeader(),
         });
         if (!res.ok) throw new Error(await res.text());
