@@ -5,6 +5,22 @@ import {
     marcarComoLeida,
     marcarTodasComoLeidas,
 } from "../services/notificacionService";
+import { NOTIFICACIONES_UPDATED_EVENT } from "./useNotificacionesCount";
+
+function notificarCambioContador() {
+    window.dispatchEvent(new Event(NOTIFICACIONES_UPDATED_EVENT));
+}
+
+function normalizeNotificaciones(data) {
+    if (Array.isArray(data)) return data;
+
+    if (Array.isArray(data?.data)) return data.data;
+    if (Array.isArray(data?.notificaciones)) return data.notificaciones;
+    if (Array.isArray(data?.content)) return data.content;
+    if (Array.isArray(data?.items)) return data.items;
+
+    return [];
+}
 
 export function useNotificaciones() {
     const [notificaciones, setNotificaciones] = useState([]);
@@ -13,11 +29,18 @@ export function useNotificaciones() {
     const [filtro, setFiltro] = useState("todas");
 
     const cargar = useCallback(async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setNotificaciones([]);
+            setLoading(false);
+            return;
+        }
+
         setLoading(true);
         setError(null);
         const result = await getMisNotificaciones();
         if (result.success) {
-setNotificaciones(Array.isArray(result.data) ? result.data : []);
+            setNotificaciones(normalizeNotificaciones(result.data));
         } else {
             setError(result.error);
         }
@@ -25,7 +48,8 @@ setNotificaciones(Array.isArray(result.data) ? result.data : []);
     }, []);
 
     useEffect(() => {
-        cargar();
+        const timeoutId = window.setTimeout(cargar, 0);
+        return () => window.clearTimeout(timeoutId);
     }, [cargar]);
 
     async function leerUna(id) {
@@ -34,6 +58,7 @@ setNotificaciones(Array.isArray(result.data) ? result.data : []);
             setNotificaciones((prev) =>
                 prev.map((n) => (n.id === id ? { ...n, leida: true } : n))
             );
+            notificarCambioContador();
         }
     }
 
@@ -41,6 +66,25 @@ setNotificaciones(Array.isArray(result.data) ? result.data : []);
         const result = await marcarTodasComoLeidas();
         if (result.success) {
             setNotificaciones((prev) => prev.map((n) => ({ ...n, leida: true })));
+            notificarCambioContador();
+            return;
+        }
+
+        const noLeidas = notificaciones.filter((n) => !n.leida);
+        const resultados = await Promise.all(
+            noLeidas.map((n) => marcarComoLeida(n.id))
+        );
+        const idsLeidas = noLeidas
+            .filter((_, index) => resultados[index].success)
+            .map((n) => n.id);
+
+        if (idsLeidas.length > 0) {
+            setNotificaciones((prev) =>
+                prev.map((n) => (idsLeidas.includes(n.id) ? { ...n, leida: true } : n))
+            );
+            notificarCambioContador();
+        } else {
+            setError(result.error || "No se pudieron marcar las notificaciones como leidas.");
         }
     }
 
@@ -48,6 +92,7 @@ setNotificaciones(Array.isArray(result.data) ? result.data : []);
         const result = await eliminarNotificacion(id);
         if (result.success) {
             setNotificaciones((prev) => prev.filter((n) => n.id !== id));
+            notificarCambioContador();
         }
     }
 
