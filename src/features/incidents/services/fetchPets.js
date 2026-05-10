@@ -17,7 +17,6 @@ function buildReportsUrl(filters = {}) {
 
     const query = new URLSearchParams();
 
-    if (filters.estado) query.append("estado", filters.estado);
     if (filters.search) query.append("search", filters.search);
 
     const queryString = query.toString();
@@ -52,7 +51,6 @@ function filterPets(pets, filters) {
         const tipoReporte = getReportTypeFilter(filters);
 
         if (tipoReporte && p.tipoReporte !== tipoReporte && p.tipo_reporte !== tipoReporte) return false;
-        if (filters.estado && p.estadoReporte !== filters.estado && p.estado_reporte !== filters.estado) return false;
         if (filters.search) {
             const searchableText = [
                 p.name,
@@ -64,6 +62,8 @@ function filterPets(pets, filters) {
                 p.approximateAge,
                 p.description,
                 p.contacto,
+                p.latitud,
+                p.longitud,
             ].join(" ").toLowerCase();
 
             if (!searchableText.includes(filters.search.toLowerCase())) return false;
