@@ -83,16 +83,19 @@ function formatFecha(fechaStr) {
     return fecha.toLocaleDateString("es-CL", { day: "numeric", month: "short" });
 }
 
-export default function NotificacionCard({ notificacion, onLeer, onEliminar }) {
+export default function NotificacionCard({ notificacion, onLeer, onEliminar, onClickCard }) {
     const config = TIPO_CONFIG[notificacion.tipo] ?? TIPO_CONFIG.SISTEMA;
+    const tieneReporte = Boolean(notificacion.idReporte);
 
     return (
         <div
+            onClick={tieneReporte ? () => onClickCard(notificacion) : undefined}
             className={`relative flex gap-4 rounded-2xl border p-4 backdrop-blur-sm transition-all duration-200
                 ${notificacion.leida
                     ? "bg-white/5 border-white/10"
                     : "bg-white/10 border-white/20 shadow-lg"
-                }`}
+                }
+                ${tieneReporte ? "cursor-pointer hover:bg-white/15" : ""}`}
         >
             {/* Indicador no leída */}
             {!notificacion.leida && (
@@ -126,7 +129,7 @@ export default function NotificacionCard({ notificacion, onLeer, onEliminar }) {
 
                     {!notificacion.leida && (
                         <button
-                            onClick={() => onLeer(notificacion.id)}
+                            onClick={e => { e.stopPropagation(); onLeer(notificacion.id); }}
                             className="text-xs text-[#5DCAA5] hover:text-[#5DCAA5]/80 transition-colors"
                         >
                             Marcar como leída
@@ -134,7 +137,7 @@ export default function NotificacionCard({ notificacion, onLeer, onEliminar }) {
                     )}
 
                     <button
-                        onClick={() => onEliminar(notificacion.id)}
+                        onClick={e => { e.stopPropagation(); onEliminar(notificacion.id); }}
                         className="ml-auto text-xs text-white/30 hover:text-red-400 transition-colors"
                     >
                         Eliminar

@@ -85,7 +85,7 @@ export default function Reportes() {
   }, [activeFilter, reports, search]);
 
   return (
-    <div className="h-full overflow-y-auto bg-[#f7faf6] pb-20 text-[#102218] md:h-[calc(100vh-6rem)]">
+    <div className="h-[calc(100vh-3rem)] min-h-0 overflow-y-scroll overscroll-contain bg-[#f7faf6] pb-20 text-[#102218] md:h-[calc(100vh-6rem)]">
       <section className="border-b border-[#143624]/10 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-8">
           <p className="text-sm font-black uppercase tracking-[0.24em] text-[#2f7f5a]">

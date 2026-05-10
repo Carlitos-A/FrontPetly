@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useAuth } from "../../auth/context/authContext";
 import { useNotificaciones } from "../hooks/useNotificaciones";
 import NotificacionCard from "./NotificacionCard";
+import NotificacionDetalleModal from "./NotificacionDetalleModal";
 
 function BellIcon() {
     return (
@@ -30,6 +32,7 @@ const FILTROS = [
 
 export default function NotificacionesPage() {
     const { user } = useAuth();
+    const [notificacionSeleccionada, setNotificacionSeleccionada] = useState(null);
 
     const {
         notificaciones,
@@ -55,8 +58,8 @@ export default function NotificacionesPage() {
     }
 
     return (
-        <div className="h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 pb-12 px-4">
-            <div className="mx-auto max-w-2xl">
+        <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 pb-6 px-4">
+            <div className="mx-auto flex max-w-2xl flex-col">
 
                 {/* Encabezado */}
                 <div className="mb-6 flex items-center justify-between">
@@ -105,8 +108,9 @@ export default function NotificacionesPage() {
                 </div>
 
                 {/* Contenido */}
+                <div className="max-h-[calc(100vh-260px)] overflow-y-auto pr-2">
                 {loading ? (
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3 pb-4">
                         {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
                     </div>
                 ) : error ? (
@@ -134,11 +138,21 @@ export default function NotificacionesPage() {
                                 notificacion={n}
                                 onLeer={leerUna}
                                 onEliminar={eliminar}
+                                onClickCard={setNotificacionSeleccionada}
                             />
                         ))}
                     </div>
                 )}
             </div>
+        </div>
+
+        {notificacionSeleccionada && (
+            <NotificacionDetalleModal
+                notificacion={notificacionSeleccionada}
+                onClose={() => setNotificacionSeleccionada(null)}
+                onLeer={leerUna}
+            />
+        )}
         </div>
     );
 }
