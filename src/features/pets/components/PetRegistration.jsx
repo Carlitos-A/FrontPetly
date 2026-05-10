@@ -20,7 +20,7 @@ export default function PetRegistration() {
     }
 
     return (
-        <div className="min-h-screen pt-20 pb-8">
+        <div className="h-full pt-20 pb-8">
             <div className="max-w-2xl mx-auto px-4">
 
                 <IndicadorPaso Paso={step} onStepClick={setStep} />

@@ -45,7 +45,7 @@ export default function NotificacionesPage() {
 
     if (!user) {
         return (
-            <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 flex items-center justify-center px-4">
+            <div className="h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 flex items-center justify-center px-4">
                 <div className="text-center text-white/60">
                     <BellIcon />
                     <p className="mt-4">Inicia sesión para ver tus notificaciones.</p>
@@ -55,7 +55,7 @@ export default function NotificacionesPage() {
     }
 
     return (
-        <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 pb-12 px-4">
+        <div className="h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 pb-12 px-4">
             <div className="mx-auto max-w-2xl">
 
                 {/* Encabezado */}
