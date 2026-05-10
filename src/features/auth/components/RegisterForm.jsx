@@ -1,5 +1,6 @@
 import { useRegisterForm } from "../hooks/useRegisterForm";
 import Field from "../../../shared/components/Field";
+import heroMascotasImg from "../../../assets/heromascotas.jpg";
 
 
 export default function RegisterForm() {
@@ -19,7 +20,7 @@ export default function RegisterForm() {
 
             {/* PANEL IZQUIERDO */}
             <div className="hidden md:flex md:w-[45%] flex-col justify-between p-10 relative overflow-hidden bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10]">
-                <img src="src/assets/heromascotas.jpg" alt="Register" />
+                <img src={heroMascotasImg} alt="Register" />
 
             </div>
 
