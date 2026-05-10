@@ -1,5 +1,5 @@
 import { getDistanceFromReference } from "../utils/distance";
-import { ubicacionCoord } from "../../map/services/ubicacionService";
+import { ubicacionCoord2 } from "../../map/services/ubicacionService";
 import { useEffect, useState } from "react";
 import PawIcon from "../../../shared/components/PawIcon";
 
@@ -41,7 +41,7 @@ useEffect(() => {
       return;
     }
 
-    const place = await ubicacionCoord(
+    const place = await ubicacionCoord2(
       pet.latitud,
       pet.longitud,
       controller.signal
