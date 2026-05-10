@@ -153,6 +153,6 @@ export default function NotificacionesPage() {
                 onLeer={leerUna}
             />
         )}
-        </>
+        </div>
     );
 }
