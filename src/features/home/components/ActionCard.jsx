@@ -1,3 +1,6 @@
+import SearchIcon from "../../../shared/components/SearchIcon";
+import PawIcon from "../../../shared/components/PawIcon";
+
 export default function ActionCard({ title, text, tone, onClick }) {
   const isLost = tone === "lost";
 
@@ -12,7 +15,7 @@ export default function ActionCard({ title, text, tone, onClick }) {
       ].join(" ")}
     >
       <span className="grid h-14 w-14 place-items-center rounded-full bg-white/55">
-        {isLost ? "🔎" : "🐾"}
+        {isLost ? <SearchIcon /> : <PawIcon />}
       </span>
 
       <span className="text-base font-black">{title}</span>

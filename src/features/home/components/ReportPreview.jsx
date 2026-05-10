@@ -1,3 +1,5 @@
+import PawIcon from "../../../shared/components/PawIcon";
+
 export default function ReportPreview({ report }) {
   const typeStyles = {
     PERDIDA: "bg-[#e51f2e] text-white",
@@ -16,7 +18,7 @@ export default function ReportPreview({ report }) {
           />
         ) : (
           <div className="grid h-full place-items-center bg-linear-to-br from-[#e9f5ee] to-[#b8dfcd] text-[#143624]">
-            🐾
+            {<PawIcon />}
           </div>
         )}
 
