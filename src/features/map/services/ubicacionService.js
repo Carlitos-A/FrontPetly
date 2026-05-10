@@ -28,7 +28,7 @@ export async function ubicacionCoord(lat, lng, signal) {
     const data = await response.json();
     const feature = data.features?.[0];
 
-    return formatearUbicacion(feature);
+    return feature?.place_name || "Ubicación no informada";
   } catch (error) {
     if (error.name === "AbortError") throw error;
     return "Ubicación no informada";
@@ -71,23 +71,6 @@ export async function ubicacionCoord2(lat, lng, signal) {
     if (error.name === "AbortError") throw error;
     return "Ubicación no informada";
   }
-}
-
-function formatearUbicacion(feature) {
-  if (!feature) return "Ubicación no informada";
-
-  const calle = feature.text;
-
-  const comuna =
-    feature.context?.find((item) => item.id?.startsWith("locality"))?.text ||
-    feature.context?.find((item) => item.id?.startsWith("place"))?.text ||
-    feature.context?.find((item) => item.id?.startsWith("region"))?.text;
-
-  const partes = [calle, comuna].filter(Boolean);
-
-  return partes.length > 0
-    ? partes.join(", ")
-    : feature.place_name || "Ubicación no informada";
 }
 
 function formatearUbicacion2(feature) {
