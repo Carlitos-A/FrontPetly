@@ -1,7 +1,10 @@
 import { getDistanceFromReference } from "../utils/distance";
+import { ubicacionCoord } from "../../map/services/ubicacionService";
+import { useEffect, useState } from "react";
 
 const SPECIES_EMOJI = { dog: "🐕", cat: "🐈", other: "🐾" };
 const SPECIES_BG = { dog: "bg-orange-50", cat: "bg-violet-50", other: "bg-sky-50" };
+
 
 function hoursAgo(date) {
   const ms = Date.now() - new Date(date).getTime();
@@ -16,6 +19,8 @@ function timeLabel(hours) {
 }
 
 export default function PetCard({ pet, onClick, referenceLocation, selected = false }) {
+  const locationFallback = getPetLocationText(pet);
+  const [ubicacion, setUbicacion] = useState(locationFallback || "Cargando ubicación...");
   const hours = hoursAgo(pet.fechaReporte);
   const urgent = hours < 12;
   const distance = getDistanceFromReference(referenceLocation, pet);
@@ -26,6 +31,30 @@ export default function PetCard({ pet, onClick, referenceLocation, selected = fa
     ENCONTRADA: "bg-[#5DCAA5]/20 text-[#5DCAA5] border border-[#5DCAA5]/30",
     AVISTAMIENTO: "bg-yellow-500/20 text-yellow-400 border border-yellow-400/30",
   };
+
+useEffect(() => {
+  const controller = new AbortController();
+
+  async function cargarUbicacion() {
+    if (!hasCoordinates(pet)) {
+      setUbicacion(locationFallback || "Ubicación no disponible");
+      return;
+    }
+
+    const place = await ubicacionCoord(
+      pet.latitud,
+      pet.longitud,
+      controller.signal
+    );
+
+    setUbicacion(isMissingLocation(place) ? locationFallback || place : place);
+  }
+
+  cargarUbicacion();
+
+  return () => controller.abort();
+}, [pet.latitud, pet.longitud, locationFallback]);
+
 
   return (
     <article
@@ -45,7 +74,7 @@ export default function PetCard({ pet, onClick, referenceLocation, selected = fa
         {pet.photo ? (
           <img
             src={pet.photo}
-            alt={pet.estadoReporte}
+            alt={pet.name || "Mascota sin nombre"}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -77,12 +106,11 @@ export default function PetCard({ pet, onClick, referenceLocation, selected = fa
 
       <div className="flex flex-col gap-1.5 p-3 flex-1">
         <div className="flex items-start justify-between gap-2">
-          <span className="text-sm font-medium text-white">{pet.estadoReporte}</span>
+          <span className="text-sm font-medium text-white">{ubicacion || "Mascota sin nombre"}</span>
           <span className="text-xs text-white/40">{distanceLabel}</span>
         </div>
 
         <div className="flex flex-col gap-0.5">
-          <Row label="estado reporte" value={pet.status} />
           <Row label="especie" value={pet.species} />
           <Row label="raza" value={pet.breed} />
           <Row label="color" value={pet.color} />
@@ -110,4 +138,19 @@ function Row({ label, value }) {
       {value || "Sin información"}
     </p>
   );
+}
+
+function getPetLocationText(pet) {
+  return pet.sector || pet.comuna || pet.ubicacion || pet.direccion || pet.resolvedPlace || "";
+}
+
+function hasCoordinates(pet) {
+  const latitude = Number(pet.latitud);
+  const longitude = Number(pet.longitud);
+
+  return Number.isFinite(latitude) && Number.isFinite(longitude);
+}
+
+function isMissingLocation(value) {
+  return !value || value === "Ubicación no informada" || value === "Ubicación no disponible";
 }
