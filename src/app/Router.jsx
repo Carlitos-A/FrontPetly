@@ -7,6 +7,7 @@ import PetRegistrationPage from "../pages/PetRegistrationPage";
 import MisMascotas from "../pages/MisMascotas";
 import Perfil from "../pages/ProfilePage";
 import MisReportes from "../pages/MyReport";
+import Notificaciones from "../pages/Notificaciones";
 
 export default function AppRouter() {
     return (
@@ -20,6 +21,7 @@ export default function AppRouter() {
                     <Route path="/mis-mascotas" element={<MisMascotas/>} />
                     <Route path="/perfil" element={<Perfil/>} />
                     <Route path="/mis-reportes" element={<MisReportes/>} />
+                    <Route path="/notificaciones" element={<Notificaciones/>} />
                 </Route>
             </Routes>
         </BrowserRouter>

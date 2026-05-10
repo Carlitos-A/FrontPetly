@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../features/auth/context/authContext";
 import { Link } from "react-router-dom";
+import { useNotificacionesCount } from "../../features/notificaciones/hooks/useNotificacionesCount";
 
 export default function Header() {
     const { user, logout } = useAuth();
     const [open, setOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { count: noLeidasCount } = useNotificacionesCount();
 
     const dropdownRef = useRef(null);
 
@@ -41,8 +43,25 @@ export default function Header() {
                     <li><a className="hover:text-[#5DCAA5]" href="#">Contacto</a></li>
                 </ul>
 
-                <div className="flex justify-end gap-2">
+                <div className="flex justify-end gap-2 items-center">
 
+                    {/* Campana de notificaciones */}
+                    {user && (
+                        <Link
+                            to="/notificaciones"
+                            className="relative flex items-center justify-center w-9 h-9 rounded-lg text-white bg-white/10 border border-white/20 hover:bg-white/20 hover:text-[#5DCAA5] transition-all"
+                            aria-label="Notificaciones"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                            </svg>
+                            {noLeidasCount > 0 && (
+                                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#5DCAA5] text-[10px] font-bold text-[#0a1a10]">
+                                    {noLeidasCount > 9 ? "9+" : noLeidasCount}
+                                </span>
+                            )}
+                        </Link>
+                    )}
 
                     <button
                         className="md:hidden text-white p-2"
@@ -153,7 +172,19 @@ export default function Header() {
                                             </Link>
                                         </li>
 
-
+                                        <li>
+                                            <Link
+                                                to="/notificaciones"
+                                                className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/10 transition cursor-pointer"
+                                            >
+                                                Notificaciones
+                                                {noLeidasCount > 0 && (
+                                                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#5DCAA5] px-1 text-[10px] font-bold text-[#0a1a10]">
+                                                        {noLeidasCount > 9 ? "9+" : noLeidasCount}
+                                                    </span>
+                                                )}
+                                            </Link>
+                                        </li>
 
                                         <li className="mt-1 border-t border-white/10 pt-1">
                                             <button
@@ -204,6 +235,14 @@ export default function Header() {
                                 </Link>
                                 <Link className="py-2 hover:text-[#5DCAA5]" to="/mis-reportes">
                                     Mis reportes
+                                </Link>
+                                <Link className="flex items-center justify-between py-2 hover:text-[#5DCAA5]" to="/notificaciones">
+                                    Notificaciones
+                                    {noLeidasCount > 0 && (
+                                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#5DCAA5] px-1 text-[10px] font-bold text-[#0a1a10]">
+                                            {noLeidasCount > 9 ? "9+" : noLeidasCount}
+                                        </span>
+                                    )}
                                 </Link>
                                 <button onClick={logout} className="text-left py-2 text-red-300 hover:text-red-400">
                                     Cerrar sesión
