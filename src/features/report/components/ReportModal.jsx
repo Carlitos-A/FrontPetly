@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import MapModal from "./MapModal";
 import FormModal from "./FormModal";
 
@@ -9,12 +9,11 @@ export default function ReportModal({ open, onClose, onSubmit, actionType, tipoR
     const [step, setStep] = useState("map"); // "map" | "form"
     const [coords, setCoords] = useState(null);
 
-    useEffect(() => {
-        if (!open) {
-            setStep("map");
-            setCoords(null);
-        }
-    }, [open]);
+    function handleClose() {
+        setStep("map");
+        setCoords(null);
+        onClose();
+    }
 
     if (!open) return null;
     return (
@@ -22,7 +21,7 @@ export default function ReportModal({ open, onClose, onSubmit, actionType, tipoR
             {step === "map" && (
                 <MapModal
                     open={true}
-                    onClose={onClose}
+                    onClose={handleClose}
                     onContinue={(selectedCoords) => {
                         setCoords(selectedCoords);
                         setStep("form");
@@ -37,7 +36,7 @@ export default function ReportModal({ open, onClose, onSubmit, actionType, tipoR
                     actionType={actionType}
                     tipoReporte={tipoReporte}
                     onBack={() => setStep("map")}
-                    onClose={onClose}
+                    onClose={handleClose}
                     onSubmit={async (data) => {
                         await onSubmit(data);
                     }}

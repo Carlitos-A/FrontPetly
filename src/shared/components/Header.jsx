@@ -23,7 +23,7 @@ export default function Header() {
     }, []);
 
     return (
-        <nav className="bg-black/30 backdrop-blur fixed w-full top-0 left-0 z-20 border-b border-white/10">
+        <nav className="bg-[#1a412f]/95 backdrop-blur fixed w-full top-0 left-0 z-20 border-b border-white/10">
             <div className="max-w-7xl mx-auto flex justify-between items-center p-1">
 
                 {/* IZQUIERDA */}
@@ -39,8 +39,8 @@ export default function Header() {
                 {/* CENTRO */}
                 <ul className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 gap-8 text-white">
                     <li><a className="hover:text-[#5DCAA5]" href="/">Home</a></li>
-                    <li><a className="hover:text-[#5DCAA5]" href="#">Servicios</a></li>
-                    <li><a className="hover:text-[#5DCAA5]" href="#">Contacto</a></li>
+                    <li><a className="hover:text-[#5DCAA5]" href="/Mapa">Mapa</a></li>
+                    <li><a className="hover:text-[#5DCAA5]" href="/Reportes">Reportes</a></li>
                 </ul>
 
                 <div className="flex justify-end gap-2 items-center">
