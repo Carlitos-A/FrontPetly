@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchPetById } from "../../incidents/services/fetchPets";
+import { actualizarEstadoCoincidencia, getCoincidenciasDeReporte } from "../../incidents/services/coincidenciasService";
 import PawIcon from "../../../shared/components/PawIcon";
 const REPORT_STYLES = {
     PERDIDA: "bg-red-500/20 text-red-300 border-red-400/30",
@@ -106,26 +107,31 @@ function StepCoincidencia({ reporte, onConfirmar, onRechazar, accionLoading, res
 
     if (resultado) {
         const esConfirmado = resultado === "confirmado";
+        const esError = resultado === "error";
+        const borderColor = esConfirmado ? "border-[#5DCAA5] bg-[#5DCAA5]/10" : esError ? "border-yellow-400 bg-yellow-400/10" : "border-red-400 bg-red-500/10";
+        const textColor = esConfirmado ? "text-[#5DCAA5]" : esError ? "text-yellow-300" : "text-red-300";
         return (
             <div className="flex flex-col items-center justify-center gap-6 py-8 text-center">
-                <div className={`flex h-16 w-16 items-center justify-center rounded-full border-2 ${esConfirmado ? "border-[#5DCAA5] bg-[#5DCAA5]/10" : "border-red-400 bg-red-500/10"}`}>
+                <div className={`flex h-16 w-16 items-center justify-center rounded-full border-2 ${borderColor}`}>
                     {esConfirmado ? (
                         <svg className="w-8 h-8 text-[#5DCAA5]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     ) : (
-                        <svg className="w-8 h-8 text-red-300" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <svg className={`w-8 h-8 ${textColor}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     )}
                 </div>
                 <div>
-                    <p className={`text-lg font-bold ${esConfirmado ? "text-[#5DCAA5]" : "text-red-300"}`}>
-                        {esConfirmado ? "¡Coincidencia confirmada!" : "Coincidencia rechazada"}
+                    <p className={`text-lg font-bold ${textColor}`}>
+                        {esConfirmado ? "¡Coincidencia confirmada!" : esError ? "Error al procesar" : "Coincidencia rechazada"}
                     </p>
                     <p className="mt-2 text-sm text-white/50">
                         {esConfirmado
-                            ? "Hemos notificado al reportante. Pronto recibirás más información."
+                            ? "Ambos reportes han sido marcados como resueltos."
+                            : esError
+                            ? "No se pudo procesar la acción. Intenta de nuevo más tarde."
                             : "Seguiremos buscando coincidencias para tu mascota."}
                     </p>
                 </div>
@@ -209,6 +215,7 @@ export default function NotificacionDetalleModal({ notificacion, onClose, onLeer
     const [resultado, setResultado] = useState(null);
 
     const esCoincidencia = notificacion?.tipo === "COINCIDENCIA_POTENCIAL";
+    const esMascotaEncontrada = notificacion?.tipo === "MASCOTA_ENCONTRADA";
 
     useEffect(() => {
         const reporteId = notificacion?.idReporte;
@@ -222,10 +229,24 @@ export default function NotificacionDetalleModal({ notificacion, onClose, onLeer
         setReporte(null);
         setStep("detalle");
         setResultado(null);
-        fetchPetById(reporteId)
-            .then(data => {
+
+        const fetchReporte = fetchPetById(reporteId);
+        const fetchCoincidencia = esCoincidencia && notificacion.idCoincidencia
+            ? getCoincidenciasDeReporte(reporteId)
+            : Promise.resolve(null);
+
+        Promise.all([fetchReporte, fetchCoincidencia])
+            .then(([data, coincidenciasResult]) => {
                 if (!data) throw new Error("No se encontró el reporte");
                 setReporte(data);
+
+                if (coincidenciasResult?.success && Array.isArray(coincidenciasResult.data)) {
+                    const match = coincidenciasResult.data.find(
+                        c => String(c.id) === String(notificacion.idCoincidencia)
+                    );
+                    if (match?.estado === "CONFIRMADA") setResultado("confirmado");
+                    else if (match?.estado === "DESCARTADA") setResultado("rechazado");
+                }
             })
             .catch(err => setError(err.message))
             .finally(() => setLoading(false));
@@ -236,8 +257,11 @@ export default function NotificacionDetalleModal({ notificacion, onClose, onLeer
     async function handleConfirmar() {
         setAccionLoading(true);
         try {
-            // TODO: await confirmarCoincidencia(notificacion.idCoincidencia)
+            const result = await actualizarEstadoCoincidencia(notificacion.idCoincidencia, "CONFIRMADA");
+            if (!result.success) throw new Error(result.error);
             setResultado("confirmado");
+        } catch {
+            setResultado("error");
         } finally {
             setAccionLoading(false);
         }
@@ -246,8 +270,11 @@ export default function NotificacionDetalleModal({ notificacion, onClose, onLeer
     async function handleRechazar() {
         setAccionLoading(true);
         try {
-            // TODO: await rechazarCoincidencia(notificacion.idCoincidencia)
+            const result = await actualizarEstadoCoincidencia(notificacion.idCoincidencia, "DESCARTADA");
+            if (!result.success) throw new Error(result.error);
             setResultado("rechazado");
+        } catch {
+            setResultado("error");
         } finally {
             setAccionLoading(false);
         }
@@ -257,6 +284,8 @@ export default function NotificacionDetalleModal({ notificacion, onClose, onLeer
 
     const stepLabel = esCoincidencia
         ? step === "detalle" ? "1 / 2 — Detalle" : "2 / 2 — Coincidencia"
+        : esMascotaEncontrada
+        ? "Mascota encontrada"
         : null;
 
     return (
@@ -314,6 +343,20 @@ export default function NotificacionDetalleModal({ notificacion, onClose, onLeer
                     ) : !reporte ? (
                         <div className="py-8 text-center">
                             <p className="text-sm text-white/40">Este tipo de notificación no tiene reporte asociado.</p>
+                        </div>
+                    ) : esMascotaEncontrada ? (
+                        <div className="flex flex-col items-center justify-center gap-6 py-8 text-center">
+                            <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#5DCAA5] bg-[#5DCAA5]/10">
+                                <svg className="w-8 h-8 text-[#5DCAA5]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p className="text-lg font-bold text-[#5DCAA5]">¡Tu mascota fue encontrada!</p>
+                                <p className="mt-2 text-sm text-white/50">
+                                    Una coincidencia fue confirmada y tu reporte ha sido marcado como resuelto.
+                                </p>
+                            </div>
                         </div>
                     ) : step === "detalle" ? (
                         <StepDetalle

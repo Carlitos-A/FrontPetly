@@ -68,6 +68,7 @@ export default function ReportDetailView({
     totalCoincidencias,
     onPrevCoincidencia,
     onNextCoincidencia,
+    coincidencia,
 }) {
     const imageUrl = reporte.photo || reporte.imagen_url;
     const reportStyle = REPORT_STYLES[reporte.tipoReporte] || "bg-white/10 text-white/70 border-white/20";
@@ -165,6 +166,7 @@ export default function ReportDetailView({
                             onRechazar={onRechazar}
                             loading={accionLoading}
                             resultado={accionResultado}
+                            coincidencia={coincidencia}
                         />
                     )}
 

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useReportDetail } from "../features/incidents/hooks/useReportDetail";
 import ReportDetailView from "../features/incidents/components/ReportDetailView";
@@ -10,12 +11,21 @@ export default function ReportDetailPage() {
     const idReporteMio = searchParams.get("idReporteMio");
     const coincidenciasParam = searchParams.get("coincidencias");
     const listaCoincidencias = coincidenciasParam ? coincidenciasParam.split(",") : [];
-    const currentIdx = listaCoincidencias.findIndex(c => c === id);
+    const [listaLocal, setListaLocal] = useState(listaCoincidencias);
+    const currentIdx = listaLocal.findIndex(c => c === id);
     const navigate = useNavigate();
     const { user } = useAuth();
 
-    const { reporte, loading, error, ubicacion, accionLoading, accionResultado, confirmar, rechazar } =
+    const { reporte, loading, error, ubicacion, accionLoading, accionResultado, confirmar, rechazar, coincidencia } =
         useReportDetail(id);
+
+    useEffect(() => {
+        if (accionResultado?.tipo === "exito") {
+            setListaLocal([]);
+        } else if (accionResultado?.tipo === "info") {
+            setListaLocal(prev => prev.filter(c => c !== id));
+        }
+    }, [accionResultado]);
 
     const esDueñoDeAmbos =
         tipo === "COINCIDENCIA_POTENCIAL" &&
@@ -30,10 +40,10 @@ export default function ReportDetailPage() {
     }
 
     const onPrevCoincidencia = currentIdx > 0
-        ? () => navegarACoincidencia(listaCoincidencias[currentIdx - 1])
+        ? () => navegarACoincidencia(listaLocal[currentIdx - 1])
         : undefined;
-    const onNextCoincidencia = currentIdx !== -1 && currentIdx < listaCoincidencias.length - 1
-        ? () => navegarACoincidencia(listaCoincidencias[currentIdx + 1])
+    const onNextCoincidencia = currentIdx !== -1 && currentIdx < listaLocal.length - 1
+        ? () => navegarACoincidencia(listaLocal[currentIdx + 1])
         : undefined;
 
     if (loading) {
@@ -74,9 +84,10 @@ export default function ReportDetailPage() {
                     accionLoading={accionLoading}
                     accionResultado={accionResultado}
                     coincidenciaActual={currentIdx !== -1 ? currentIdx + 1 : undefined}
-                    totalCoincidencias={listaCoincidencias.length > 1 ? listaCoincidencias.length : undefined}
+                    totalCoincidencias={listaLocal.length > 1 ? listaLocal.length : undefined}
                     onPrevCoincidencia={onPrevCoincidencia}
                     onNextCoincidencia={onNextCoincidencia}
+                    coincidencia={coincidencia}
                 />
             </div>
         </div>
