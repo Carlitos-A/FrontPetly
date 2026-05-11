@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import Field from "../../../shared/components/Field";
 import { useEditProfile } from "../hooks/UseEditProfile";
+import { useAuth } from "../../auth/context/authContext";
 
 export default function EditProfilePage() {
+    const { user } = useAuth();
     const {
-        user,
         formData,
-        loading,
+        loading,    
         error,
         success,
         handleChange,
@@ -60,7 +61,7 @@ export default function EditProfilePage() {
                             <input name="direccion" value={formData.direccion} onChange={handleChange} placeholder="Dirección" />
                         </Field>
                         <Field label="RUN">
-                            <input name="run" value={formData.run} onChange={handleChange} placeholder="RUN sin puntos" />
+                            <input name="run" value={formData.run} readOnly disabled placeholder="" className="cursor-not-allowed opacity-70" />
                         </Field>
                         <Field label="DV">
                             <input name="dv" value={formData.dv} onChange={handleChange} placeholder="Dígito verificador" maxLength="1" />

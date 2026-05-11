@@ -12,6 +12,7 @@ import ReportFlowPage from "../pages/ReportFlowPage";
 import Reportes from "../pages/Reportes";
 import Notificaciones from "../pages/Notificaciones";
 import ReportDetailPage from "../pages/ReportDetailPage";
+import EditProfilePage from "../pages/EditProfile";
 
 export default function AppRouter() {
     return (
@@ -30,6 +31,7 @@ export default function AppRouter() {
                     <Route path="/reportar/:tipo" element={<ReportFlowPage/>} />
                     <Route path="/notificaciones" element={<Notificaciones/>} />
                     <Route path="/reportes/:id" element={<ReportDetailPage/>} />
+                    <Route path="/editar-perfil" element={<EditProfilePage/>} />
                 </Route>
             </Routes>
         </BrowserRouter>

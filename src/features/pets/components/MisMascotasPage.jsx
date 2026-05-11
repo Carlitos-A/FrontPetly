@@ -3,7 +3,7 @@ import { useMisMascotas } from "../hooks/useMisMascotas";
 import MisMascotasGrid from "./MisMascotasGrid";
 
   export default function MisMascotasPage() {
-    const { pets, loading, error } = useMisMascotas();
+    const { pets, loading } = useMisMascotas();
 
     function handleEdit(pet) {
       console.log("Editar:", pet);
@@ -38,11 +38,6 @@ import MisMascotasGrid from "./MisMascotasGrid";
           </div>
         </div>
 
-        {error && (
-          <div className="w-full max-w-6xl rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            {error}
-          </div>
-        )}
 
         <MisMascotasGrid
           pets={pets}

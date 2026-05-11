@@ -37,7 +37,11 @@ export function useLoginForm() {
 
         try {
             const response = await loginUser(formData);
+            
+            if (!response.success) {
+    throw new Error(response.error || "Error al iniciar sesión");
 
+}
             const { token, ...userData } = response.data;
 
             if (!token) {

@@ -1,10 +1,10 @@
-const USER_API_URL = "http://localhost:8081/petly/usuarios";
+const USER_API_URL = "http://localhost:8080/petly/usuarios";
 
 export async function updateUserProfile(data) {
     try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch(`${USER_API_URL}/actualizar`, {
+        const response = await fetch(`${USER_API_URL}/${data.run}/actualizar`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

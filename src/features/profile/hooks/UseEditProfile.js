@@ -2,16 +2,45 @@ import { useState } from "react";
 import { useAuth } from "../../auth/context/authContext";
 import { updateUserProfile } from "../services/profileServices";
 
-const getInitialFormData = (user) => ({
+const getInitialFormData = (user) => {
+    const run = getRunFromUser(user) || getRunFromToken();
+
+    return {
     nombre: user?.nombre || "",
     apellido_paterno: user?.apellido_paterno || "",
     apellido_materno: user?.apellido_materno || "",
     telefono: user?.telefono || "",
     correo: user?.correo || "",
     direccion: user?.direccion || "",
-    run: user?.run?.toString() || "",
+    run: run?.toString() || "",
     dv: user?.dv || "",
-});
+};
+};
+
+function getRunFromUser(user) {
+    if (!user) return "";
+
+    return (
+        user.run ||
+        user.rut ||
+        user.RUN ||
+        user.Run ||
+        ""
+    );
+}
+
+function getRunFromToken() {
+    const payload = localStorage.getItem("token")?.split(".")?.[1];
+    if (!payload) return "";
+
+    try {
+        const normalizedPayload = payload.replace(/-/g, "+").replace(/_/g, "/");
+        const tokenData = JSON.parse(atob(normalizedPayload));
+        return getRunFromUser(tokenData);
+    } catch {
+        return "";
+    }
+}
 
 export function useEditProfile() {
     const { user, updateUser } = useAuth();

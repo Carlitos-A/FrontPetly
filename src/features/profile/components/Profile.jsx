@@ -14,7 +14,7 @@ export default function ProfilePage() {
                   Perfil
                 </p>
                 <Link
-                  to="/editar-usuario"
+                  to="/editar-perfil"
                   className="rounded-xl border border-[#5DCAA5]/30 bg-[#5DCAA5]/10 px-4 py-2 text-sm font-semibold text-[#5DCAA5] transition hover:bg-[#5DCAA5]/20"
                 >
                   Editar perfil
@@ -32,7 +32,16 @@ export default function ProfilePage() {
                 {user?.nombre || "Mi perfil"}
               </h1>
               <p className="mt-2 text-white/60">
-                {user?.correo || "Inicia sesión para gestionar tu actividad en Petly."}
+                Correo: {user?.correo || "Inicia sesión para gestionar tu actividad en Petly."}
+              </p>
+              <p className="mt-2 text-white/60">
+                Telefono: {user?.telefono || "Inicia sesión para gestionar tu actividad en Petly."} 
+              </p>
+              <p className="mt-2 text-white/60">
+                RUN: {user?.run || "Inicia sesión para gestionar tu actividad en Petly."}
+              </p>
+              <p className="mt-2 text-white/60">
+                Dígito Verificador: {user?.dv || "Inicia sesión para gestionar tu actividad en Petly."}
               </p>
             </div>
           </div>
