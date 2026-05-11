@@ -1,20 +1,21 @@
 # Petly - Frontend
 
-Frontend de una aplicación tipo Mapa para reporte y visualización de perdidad de mascotas en tiempo real.
+Petly es una plataforma colaborativa que centraliza la búsqueda de mascotas extraviadas en un solo lugar. Olvida los carteles en postes y los grupos de WhatsApp desorganizados: aquí los reportes están geolocalizados en un mapa interactivo, el sistema cruza automáticamente mascotas perdidas con mascotas encontradas usando Machine Learning, y te notifica cuando hay una posible coincidencia.
 
----
+¿Cómo funciona?
 
-## Descripción
+Un dueño publica que perdió a su perro en Maipú el martes.
+Un ciudadano reporta que encontró un perro en Maipú ese mismo día.
+El motor de ML compara especie, raza, color, ubicación y descripción.
+Si hay coincidencia, el dueño recibe una notificación al instante.
 
-Petly es una aplicación web que permite a los usuarios:
+Todo esto sin que nadie tenga que buscar manualmente. La plataforma trabaja sola.
 
-- Ver perdidas de mascotas en un mapa en tiempo real
-- Reportar eventos como encuentro o perdida de mascotas
-- Visualizar información geolocalizada
-- Interactuar con un mapa estilo navegación
+¿Por qué Petly y no las redes sociales?
 
-Inspirado en herramientas como Waze y sistemas de reportes ciudadanos.
+Porque en redes sociales la información se pierde entre miles de publicaciones, nadie cruza los datos y dependes de que alguien haya visto tu post en el momento exacto. Petly mantiene todos los reportes organizados, los cruza automáticamente y los muestra en un mapa para que cualquier persona en la zona pueda colaborar.
 
+Cada reporte suma. Cada avistamiento importa. Juntos aumentamos las probabilidades de reencuentro.
 ---
 
 ## Arquitectura Básica del proyecto
