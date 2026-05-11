@@ -26,5 +26,6 @@ export function normalizeReport(report) {
     ubicacion: report.ubicacion || report.direccion || report.resolvedPlace,
     fechaReporte: report.fechaReporte || report.fecha_reporte,
     estadoReporte: report.estadoReporte || report.estado_reporte,
+    usuarioId: report.usuarioId || report.usuario_id || report.userId || report.user_id,
   };
 }

@@ -85,7 +85,7 @@ function formatFecha(fechaStr) {
 
 export default function NotificacionCard({ notificacion, onLeer, onEliminar, onClickCard }) {
     const config = TIPO_CONFIG[notificacion.tipo] ?? TIPO_CONFIG.SISTEMA;
-    const tieneReporte = Boolean(notificacion.idReporte);
+    const tieneReporte = Boolean(notificacion.idReporte ?? notificacion.id_reporte);
 
     return (
         <div

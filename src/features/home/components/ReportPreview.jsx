@@ -1,6 +1,8 @@
 import PawIcon from "../../../shared/components/PawIcon";
+import { useNavigate } from "react-router-dom";
 
 export default function ReportPreview({ report }) {
+  const navigate = useNavigate();
   const typeStyles = {
     PERDIDA: "bg-[#e51f2e] text-white",
     ENCONTRADA: "bg-[#1a412f] text-white",
@@ -8,7 +10,10 @@ export default function ReportPreview({ report }) {
   };
 
   return (
-    <article className="min-w-[230px] snap-start overflow-hidden rounded-2xl border border-[#143624]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+    <article
+      onClick={() => navigate(`/reportes/${report.id}`, { state: { latitud: report.latitud, longitud: report.longitud } })}
+      className="min-w-57.5 cursor-pointer snap-start overflow-hidden rounded-2xl border border-[#143624]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+    >
       <div className="relative h-36 bg-[#dce9df]">
         {report.photo ? (
           <img

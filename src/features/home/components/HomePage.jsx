@@ -35,7 +35,7 @@ export default function HomePage() {
 
   return (
     <div className="h-full overflow-y-auto bg-[#f7faf6] pb-16 text-[#102218] md:h-[calc(100vh-6rem)]">
-      <section className="relative min-h-[380px] overflow-hidden bg-[#143624] md:min-h-[440px]">
+      <section className="relative min-h-95 overflow-hidden bg-[#143624] md:min-h-110">
         <img
           src={heroImage}
           alt="Persona abrazando a una mascota"
@@ -45,7 +45,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-linear-to-r from-[#07170f]/90 via-[#143624]/55 to-[#07170f]/20" />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-[#f7faf6] to-transparent" />
 
-        <div className="relative z-10 mx-auto grid min-h-[380px] max-w-7xl items-center gap-8 px-4 py-10 md:min-h-[440px] md:grid-cols-[1fr_360px] md:px-8">
+        <div className="relative z-10 mx-auto grid min-h-95 max-w-7xl items-center gap-8 px-4 py-10 md:min-h-110 md:grid-cols-[1fr_360px] md:px-8">
           <div className="max-w-2xl pt-4 text-white">
             <span className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur">
               Red comunitaria Petly
@@ -106,7 +106,7 @@ export default function HomePage() {
               type="button"
               aria-label="Ver reportes anteriores"
               onClick={() => scrollCarousel(-1)}
-              className="grid h-11 w-11 place-items-center rounded-full border border-[#143624]/15 bg-white text-[#143624] shadow-sm transition hover:bg-[#e7f6ef]"
+              className="cursor-pointer grid h-11 w-11 place-items-center rounded-full border border-[#143624]/15 bg-white text-[#143624] shadow-sm transition hover:bg-[#e7f6ef]"
             >
               {"<"}
             </button>
@@ -115,7 +115,7 @@ export default function HomePage() {
               type="button"
               aria-label="Ver mas reportes"
               onClick={() => scrollCarousel(1)}
-              className="grid h-11 w-11 place-items-center rounded-full border border-[#143624]/15 bg-white text-[#143624] shadow-sm transition hover:bg-[#e7f6ef]"
+              className="cursor-pointer grid h-11 w-11 place-items-center rounded-full border border-[#143624]/15 bg-white text-[#143624] shadow-sm transition hover:bg-[#e7f6ef]"
             >
               {">"}
             </button>

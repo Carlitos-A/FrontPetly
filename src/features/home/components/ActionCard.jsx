@@ -9,7 +9,7 @@ export default function ActionCard({ title, text, tone, onClick }) {
       type="button"
       onClick={onClick}
       className={[
-        "flex min-h-40 flex-col items-center justify-center gap-3 rounded-xl p-4 text-center shadow-sm transition",
+        "cursor-pointer flex min-h-40 flex-col items-center justify-center gap-3 rounded-xl p-4 text-center shadow-sm transition",
         "hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#1a412f]/35",
         isLost ? "bg-[#1a412f] text-white" : "bg-[#91e4ec] text-[#0d2440]",
       ].join(" ")}
