@@ -36,16 +36,29 @@ export async function createReport(data, tipoReporte) {
 
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}/petly/reportes`, {
-    method: "POST",
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-    body: formData,
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 13000);
 
-  if (!res.ok) {
-    const error = await res.text();
-    throw new Error(error || "Error al crear reporte");
+  try {
+    const res = await fetch(`${API_URL}/petly/reportes`, {
+      method: "POST",
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: formData,
+      signal: controller.signal,
+    });
+
+    if (!res.ok) {
+      const error = await res.text();
+      throw new Error(error || "Error al crear reporte");
+    }
+
+    return await res.json();
+  } catch (err) {
+    if (err.name === "AbortError") {
+      throw new Error("El servidor tardó demasiado. Intenta de nuevo en unos segundos.");
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return await res.json();
 }
