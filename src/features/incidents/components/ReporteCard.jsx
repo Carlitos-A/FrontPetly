@@ -18,7 +18,7 @@ export default function ReporteCard({ report }) {
 
     const controller = new AbortController();
 
-    ubicacionCoord2(report.latitud, report.longitud, controller.signal)
+    ubicacionCoord(report.latitud, report.longitud, controller.signal)
       .then((place) => {
         if (place && place !== "Ubicación no informada") setTitulo(place);
       })
