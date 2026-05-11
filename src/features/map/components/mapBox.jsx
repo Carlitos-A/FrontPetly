@@ -336,6 +336,8 @@ function filterReports(reports = [], filters = {}) {
     const tipoReporte = filters.tipoReporte || filters.tipo_reporte;
 
     return reports.filter((report) => {
+        const estadoReporte = report.estadoReporte ?? report.estado_reporte ?? "";
+        if (String(estadoReporte).trim().toUpperCase() === "RESUELTO") return false;
         if (tipoReporte && report.tipoReporte !== tipoReporte && report.tipo_reporte !== tipoReporte) return false;
         if (filters.search) {
             const searchableText = [

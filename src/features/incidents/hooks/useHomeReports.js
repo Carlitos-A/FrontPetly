@@ -16,7 +16,9 @@ export function useHomeReports() {
       setError(null);
 
       try {
-        const pets = await fetchPets();
+        const pets = (await fetchPets()).filter(
+          (p) => String(p.estadoReporte ?? "").trim().toUpperCase() !== "RESUELTO"
+        );
         const enriched = await enrichWithPlaces(pets.slice(0, 8), controller.signal);
 
         if (!controller.signal.aborted) setRawReports(enriched);

@@ -22,7 +22,8 @@ export function useMyReport() {
       if (ignore) return;
 
       if (result.success) {
-        setReports(Array.isArray(result.data) ? result.data : []);
+        const all = Array.isArray(result.data) ? result.data : [];
+        setReports(all.filter((r) => !isResuelto(r.estadoReporte ?? r.estado_reporte)));
       } else {
         setReports([]);
         setError(result.error);
@@ -105,4 +106,8 @@ function getTokenPayload() {
 
 function unique(values) {
   return [...new Set(values.map((value) => String(value).trim()).filter(Boolean))];
+}
+
+function isResuelto(estado) {
+  return String(estado ?? "").trim().toUpperCase() === "RESUELTO";
 }

@@ -18,7 +18,9 @@ export function useRecentReports(limit = 8) {
 
       try {
         const data = await getMapReports({});
-        const reportsFromBackend = Array.isArray(data) ? data : [];
+        const reportsFromBackend = (Array.isArray(data) ? data : []).filter(
+          (r) => String(r.estadoReporte ?? r.estado_reporte ?? "").trim().toUpperCase() !== "RESUELTO"
+        );
         const visibleReports = reportsFromBackend.slice(0, limit);
 
         const reportsWithPlaces = await Promise.all(
