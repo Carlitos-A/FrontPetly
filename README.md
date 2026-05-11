@@ -117,6 +117,7 @@ En desarrollo local el frontend apunta directamente a cada microservicio:
 | reportes-service | http://localhost:8081 |
 | geolocalizacion-service | http://localhost:8082 |
 | notificaciones-service | http://localhost:8086 |
+| API Gateway | http://localhost:8080 |
 
 ---
 
