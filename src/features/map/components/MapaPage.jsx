@@ -52,8 +52,8 @@ export default function MapaPage() {
   }
 
   return (
-    <div className="flex h-full flex-col bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] md:flex-row">
-      <div className="h-75 w-full md:h-full md:w-1/2">
+    <div className="flex h-[calc(100dvh-3rem)] min-h-0 flex-col overflow-hidden bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] md:h-full md:flex-row">
+      <div className="h-[38dvh] min-h-[260px] w-full shrink-0 md:h-full md:w-1/2">
         <Map
           filters={filters}
           selectedReportId={selectedReportId}
@@ -61,7 +61,7 @@ export default function MapaPage() {
         />
       </div>
 
-      <section className="w-full border-l border-white/10 bg-white/5 p-4 backdrop-blur-xl md:h-full md:w-1/2 md:overflow-y-auto md:pt-20">
+      <section className="min-h-0 flex-1 overflow-y-auto border-l border-white/10 bg-white/5 p-4 pb-32 backdrop-blur-xl md:h-full md:w-1/2 md:pt-20">
         <SearchBar
           value={filters.search}
           onChange={handleSearchChange}

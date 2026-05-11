@@ -14,6 +14,7 @@ function formatNotificationDate(fechaStr) {
     const diffMin = Math.floor((ahora - fecha) / 60000);
     const diffH = Math.floor(diffMin / 60);
     const diffD = Math.floor(diffH / 24);
+    
 
     if (diffMin < 1) return "Ahora";
     if (diffMin < 60) return `Hace ${diffMin} min`;
@@ -36,7 +37,6 @@ export default function Header() {
         noLeidasCount: noLeidasPreviewCount,
         recargar: recargarNotificaciones,
     } = useNotificaciones();
-
     const dropdownRef = useRef(null);
     const bellRef = useRef(null);
 
@@ -59,6 +59,11 @@ export default function Header() {
             recargarNotificaciones();
         }
     }
+    function closeMenus() {
+    setMobileMenuOpen(false);
+    setOpen(false);
+    setBellOpen(false);
+}
 
     useEffect(() => {
         function handleClickOutside(e) {
@@ -311,18 +316,18 @@ export default function Header() {
             {mobileMenuOpen && (
                 <div className="md:hidden bg-black/1 backdrop-blur border-t border-white/10 px-4 py-4 flex flex-col gap-4 ">
                     <ul className="flex flex-col gap-2 text-white text-sm">
-                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/">Home</Link></li>
-                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/Mapa">Mapa</Link></li>
-                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/Reportes">Reportes</Link></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/" onClick={closeMenus}>Home</Link></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/Mapa" onClick={closeMenus}>Mapa</Link></li>
+                        <li><Link className="block py-2 hover:text-[#5DCAA5]" to="/Reportes" onClick={closeMenus}>Reportes</Link></li>
                     </ul>
 
                     <div className="border-t border-white/10 pt-3">
                         {!user ? (
                             <div className="flex flex-col gap-2">
-                                <Link className="text-center text-white bg-white/10 px-3 py-2 rounded-lg border border-white/20 hover:bg-white/20" to="/register">
+                                <Link className="text-center text-white bg-white/10 px-3 py-2 rounded-lg border border-white/20 hover:bg-white/20" to="/register" onClick={closeMenus}>
                                     Registrarse
                                 </Link>
-                                <Link className="text-center text-white bg-white/10 px-3 py-2 rounded-lg border border-white/20 hover:bg-white/20" to="/login">
+                                <Link className="text-center text-white bg-white/10 px-3 py-2 rounded-lg border border-white/20 hover:bg-white/20" to="/login" onClick={closeMenus}>
                                     Iniciar Sesión
                                 </Link>
                             </div>
@@ -335,13 +340,13 @@ export default function Header() {
                                         <p className="text-white/50 text-xs">{user.correo}</p>
                                     </div>
                                 </div>
-                                <Link className="py-2 hover:text-[#5DCAA5]" to="/perfil">
+                                <Link className="py-2 hover:text-[#5DCAA5]" to="/perfil" onClick={closeMenus}>
                                     Perfil
                                 </Link>
-                                <Link className="py-2 hover:text-[#5DCAA5]" to="/mis-reportes">
+                                <Link className="py-2 hover:text-[#5DCAA5]" to="/mis-reportes" onClick={closeMenus}>
                                     Mis reportes
                                 </Link>
-                                <Link className="flex items-center justify-between py-2 hover:text-[#5DCAA5]" to="/notificaciones">
+                                <Link className="flex items-center justify-between py-2 hover:text-[#5DCAA5]" to="/notificaciones" onClick={closeMenus}>
                                     Notificaciones
                                     {noLeidasCount > 0 && (
                                         <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#5DCAA5] px-1 text-[10px] font-bold text-[#0a1a10]">

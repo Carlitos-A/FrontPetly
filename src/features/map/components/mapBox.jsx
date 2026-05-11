@@ -55,6 +55,7 @@ function Map({
                 addReportsLayer(map);
                 bindReportEvents(map, onReportSelectRef, popupRef);
             }
+            map.resize();
             setMapReady(true);
         });
 
@@ -81,6 +82,7 @@ function Map({
             selectionMarkerRef.current = null;
         };
     }, [token, error, selectable]);
+
 
     useEffect(() => {
         if (!mapReady || !mapRef.current || selectable) return;
@@ -109,6 +111,21 @@ function Map({
         };
     }, [filters, mapReady]);
 
+
+    useEffect(() => {
+        if (!mapReady || !mapRef.current) return;
+
+        function handleResize() {
+            mapRef.current?.resize();
+        }
+
+        window.addEventListener("resize", handleResize);
+        handleResize();
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, [mapReady]);
+
+
     useEffect(() => {
         if (!mapReady || !mapRef.current || selectable) return;
 
@@ -131,7 +148,12 @@ function Map({
         const selectedFeature = findReportFeatureById(mapRef.current, selectedId);
 
         if (selectedFeature) {
+            if (!isMobileViewport()) {
             showReportPopup(mapRef.current, selectedFeature, popupRef);
+             } else {
+                popupRef.current?.remove();
+                popupRef.current = null;
+            }       
             mapRef.current.easeTo({
                 center: selectedFeature.geometry.coordinates,
                 duration: 700,
@@ -232,6 +254,9 @@ function addReportsLayer(map) {
     });
 }
 
+
+
+
 function bindReportEvents(map, onReportSelectRef, popupRef) {
     map.on("click", "reportes-puntos", (event) => {
         const feature = event.features?.[0];
@@ -240,9 +265,11 @@ function bindReportEvents(map, onReportSelectRef, popupRef) {
         const props = feature.properties;
         onReportSelectRef.current?.(props);
 
-        showReportPopup(map, feature, popupRef);
-    });
+        if (!isMobileViewport()) {
+            showReportPopup(map, feature, popupRef);
+        }
 
+    });
     map.on("mouseenter", "reportes-puntos", () => {
         map.getCanvas().style.cursor = "pointer";
     });
@@ -257,6 +284,11 @@ function findReportFeatureById(map, reportId) {
         .querySourceFeatures("reportes")
         .find((feature) => String(feature.properties?.id) === String(reportId));
 }
+
+function isMobileViewport() {
+    return window.matchMedia("(max-width: 767px)").matches;
+}
+
 
 function showReportPopup(map, feature, popupRef) {
     const props = feature.properties;
