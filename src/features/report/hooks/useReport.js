@@ -1,11 +1,27 @@
-import { createIncident } from "../services/reportApi";
+import { useState } from "react";
+import { createReport } from "../services/reportApi";
 
 export function useReport() {
-  async function submitReport(data) {
-    console.log("Enviando reporte...", data);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    await createIncident(data);
+  async function submitReport(data, tipoReporte) {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await createReport(data, tipoReporte);
+      return result;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   }
-
-  return { submitReport };
+  return {
+    submitReport,
+    loading,
+    error,
+  };
 }

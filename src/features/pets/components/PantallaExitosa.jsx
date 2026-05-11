@@ -1,6 +1,6 @@
 export default function PantallaExitosa({ onReset }) {
     return (
-        <div className="min-h-screen bg-linear-to-br from-[#1a1a1a] via-[#0f2818] to-[#1a1a1a] pt-24 pb-16 flex items-center justify-center px-4">
+        <div className="h-full bg-linear-to-br from-[#1a1a1a] via-[#0f2818] to-[#1a1a1a] pt-24 pb-16 flex items-center justify-center px-4">
             <div className="max-w-md w-full text-center space-y-8">
                 {/* Animación de éxito */}
                 <div className="flex justify-center">

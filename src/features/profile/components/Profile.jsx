@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/context/authContext";
+import pfpImg from "../../../assets/pfp.jpg";
 
 export default function ProfilePage() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] px-4 pb-12 pt-20 text-white">
+    <div className="h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] px-4 pb-12 pt-20 text-white">
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-8">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-xl md:p-8">
               <div className="flex justify-between items-center">
@@ -22,7 +23,7 @@ export default function ProfilePage() {
               </div>
           <div className="mt-6 flex flex-col gap-5 md:flex-row md:items-center">
             <img
-              src="src/assets/pfp.jpg"
+              src={pfpImg}
               alt="Avatar de usuario"
               className="h-24 w-24 rounded-full border border-white/20 object-cover"
             />

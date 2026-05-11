@@ -9,11 +9,21 @@ const EMPTY_GEOJSON = {
     features: [],
 };
 
-function Map({ filters = {}, selectedReportId, onReportSelect }) {
+
+function Map({
+    filters = {},
+    selectedReportId,
+    onReportSelect,
+    selectable = false,
+    selectedCoords = null,
+    onLocationSelect, }) {
+
+
     const mapRef = useRef();
     const mapContainerRef = useRef();
     const onReportSelectRef = useRef(onReportSelect);
     const popupRef = useRef(null);
+    const selectionMarkerRef = useRef(null);
     const token = import.meta.env.VITE_MAPBOX_TOKEN;
     const [mapReady, setMapReady] = useState(false);
     const [error] = useState(() =>
@@ -27,7 +37,7 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
     }, [onReportSelect]);
 
     useEffect(() => {
-        if (!token || token === "tu_token_de_mapbox" || error) return;
+        if (!token || error) return;
 
         mapboxgl.accessToken = token;
 
@@ -41,9 +51,21 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
         mapRef.current = map;
 
         map.on("load", () => {
-            addReportsLayer(map);
-            bindReportEvents(map, onReportSelectRef, popupRef);
+            if (!selectable) {
+                addReportsLayer(map);
+                bindReportEvents(map, onReportSelectRef, popupRef);
+            }
+            map.resize();
             setMapReady(true);
+        });
+
+        //Verifica si la seleccion esta activada, sino, no hace nada
+        //En caso de que si se extraen las coordenadas del punto donde se hizo click
+        map.on("click", (e) => {
+            if (!selectable) return;
+
+            const { lng, lat } = e.lngLat;
+            onLocationSelect?.({ lat, lng });
         });
 
         map.on("error", (event) => {
@@ -56,11 +78,14 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
             popupRef.current?.remove();
             popupRef.current = null;
             setMapReady(false);
+            selectionMarkerRef.current?.remove();
+            selectionMarkerRef.current = null;
         };
-    }, [token, error]);
+    }, [token, error, selectable]);
+
 
     useEffect(() => {
-        if (!mapReady || !mapRef.current) return;
+        if (!mapReady || !mapRef.current || selectable) return;
 
         let ignore = false;
 
@@ -86,8 +111,23 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
         };
     }, [filters, mapReady]);
 
+
     useEffect(() => {
         if (!mapReady || !mapRef.current) return;
+
+        function handleResize() {
+            mapRef.current?.resize();
+        }
+
+        window.addEventListener("resize", handleResize);
+        handleResize();
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, [mapReady]);
+
+
+    useEffect(() => {
+        if (!mapReady || !mapRef.current || selectable) return;
 
         const selectedId = selectedReportId == null ? "" : String(selectedReportId);
 
@@ -108,13 +148,41 @@ function Map({ filters = {}, selectedReportId, onReportSelect }) {
         const selectedFeature = findReportFeatureById(mapRef.current, selectedId);
 
         if (selectedFeature) {
+            if (!isMobileViewport()) {
             showReportPopup(mapRef.current, selectedFeature, popupRef);
+             } else {
+                popupRef.current?.remove();
+                popupRef.current = null;
+            }       
             mapRef.current.easeTo({
                 center: selectedFeature.geometry.coordinates,
                 duration: 700,
             });
         }
     }, [selectedReportId, mapReady]);
+
+    useEffect(() => {
+        if (!mapReady || !mapRef.current || !selectable) return;
+        if (!selectedCoords) return;
+
+        // eliminar anterior
+        selectionMarkerRef.current?.remove();
+
+        // crear nuevo
+        selectionMarkerRef.current = new mapboxgl.Marker({ color: "#5DCAA5" })
+            .setLngLat([selectedCoords.lng, selectedCoords.lat])
+            .addTo(mapRef.current);
+
+        // centrar mapa al punto seleccionado
+        mapRef.current.easeTo({
+            center: [selectedCoords.lng, selectedCoords.lat],
+            //Hace un zoom
+            zoom: 14,
+            //Lento
+            duration: 500,
+        });
+    }, [selectedCoords, selectable, mapReady]);
+
 
     if (!token || token === "tu_token_de_mapbox") {
         return (
@@ -186,6 +254,9 @@ function addReportsLayer(map) {
     });
 }
 
+
+
+
 function bindReportEvents(map, onReportSelectRef, popupRef) {
     map.on("click", "reportes-puntos", (event) => {
         const feature = event.features?.[0];
@@ -194,9 +265,11 @@ function bindReportEvents(map, onReportSelectRef, popupRef) {
         const props = feature.properties;
         onReportSelectRef.current?.(props);
 
-        showReportPopup(map, feature, popupRef);
-    });
+        if (!isMobileViewport()) {
+            showReportPopup(map, feature, popupRef);
+        }
 
+    });
     map.on("mouseenter", "reportes-puntos", () => {
         map.getCanvas().style.cursor = "pointer";
     });
@@ -211,6 +284,11 @@ function findReportFeatureById(map, reportId) {
         .querySourceFeatures("reportes")
         .find((feature) => String(feature.properties?.id) === String(reportId));
 }
+
+function isMobileViewport() {
+    return window.matchMedia("(max-width: 767px)").matches;
+}
+
 
 function showReportPopup(map, feature, popupRef) {
     const props = feature.properties;
@@ -232,10 +310,6 @@ function showReportPopup(map, feature, popupRef) {
             Contactar
         </button>
     </div>
-
-    <p class="text-xs mt-2">
-        <span class="font-medium">Estado:</span> ${props.estado_mascota || props.estadoMascota || "Sin estado"}
-    </p>
 
     <div class="grid grid-cols-2 gap-x-3 gap-y-1 mt-2 text-xs">
         <p><span class="font-medium">Especie:</span> ${props.especie || "Sin dato"}</p>
@@ -263,14 +337,11 @@ function filterReports(reports = [], filters = {}) {
 
     return reports.filter((report) => {
         if (tipoReporte && report.tipoReporte !== tipoReporte && report.tipo_reporte !== tipoReporte) return false;
-        if (filters.estado && report.estadoReporte !== filters.estado && report.estado_reporte !== filters.estado) return false;
         if (filters.search) {
             const searchableText = [
                 report.nombre,
                 report.tipoReporte,
                 report.tipo_reporte,
-                report.estadoMascota,
-                report.estado_mascota,
                 report.especie,
                 report.raza,
                 report.colorPrincipal,

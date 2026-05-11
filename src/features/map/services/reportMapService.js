@@ -1,5 +1,5 @@
 const REPORTS_MAP_URL =
-  import.meta.env.VITE_REPORTS_MAP_URL || "http://localhost:8081/petly/reportes";
+  import.meta.env.VITE_REPORTS_MAP_URL || "http://localhost:8080/petly/reportes";
 
 function buildQuery(filters = {}) {
   const query = new URLSearchParams();
@@ -7,7 +7,6 @@ function buildQuery(filters = {}) {
   if (filters.lat != null) query.append("lat", filters.lat);
   if (filters.lng != null) query.append("lng", filters.lng);
   if (filters.radio != null) query.append("radio", filters.radio);
-  if (filters.estado) query.append("estado", filters.estado);
   if (filters.search) query.append("search", filters.search);
 
   return query.toString();
