@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ubicacionCoord } from "../../map/services/ubicacionService";
+import { ubicacionCoord2 } from "../../map/services/ubicacionService";
 import { fetchPets } from "../services/fetchPets";
 import { formatSpecies, formatTimeRelative, formatType } from "../utils/reportFormatters";
 
@@ -45,7 +45,7 @@ async function enrichWithPlaces(pets, signal) {
       if (!pet.latitud || !pet.longitud) return pet;
 
       try {
-        const place = await ubicacionCoord(pet.latitud, pet.longitud, signal);
+        const place = await ubicacionCoord2(pet.latitud, pet.longitud, signal);
         return { ...pet, resolvedPlace: place !== "Ubicación no informada" ? place : null };
       } catch (err) {
         if (err.name === "AbortError") throw err;

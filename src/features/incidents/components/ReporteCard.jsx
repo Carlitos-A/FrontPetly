@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ubicacionCoord } from "../../map/services/ubicacionService";
+import { ubicacionCoord2 } from "../../map/services/ubicacionService";
 import PawIcon from "../../../shared/components/PawIcon";
 
 const TYPE_STYLES = {
@@ -18,7 +18,7 @@ export default function ReporteCard({ report }) {
 
     const controller = new AbortController();
 
-    ubicacionCoord(report.latitud, report.longitud, controller.signal)
+    ubicacionCoord2(report.latitud, report.longitud, controller.signal)
       .then((place) => {
         if (place && place !== "Ubicación no informada") setTitulo(place);
       })
