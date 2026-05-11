@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/context/authContext";
 import { useNotificaciones } from "../hooks/useNotificaciones";
 import NotificacionCard from "./NotificacionCard";
@@ -30,6 +32,7 @@ const FILTROS = [
 
 export default function NotificacionesPage() {
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     const {
         notificaciones,
@@ -43,6 +46,34 @@ export default function NotificacionesPage() {
         eliminar,
     } = useNotificaciones();
 
+    function handleNotificacionClick(notificacion) {
+        if (!notificacion.leida) leerUna(notificacion.id);
+
+        if (notificacion.tipo === "COINCIDENCIA_POTENCIAL") {
+            const idPropio = notificacion.idReporte ?? notificacion.id_reporte;
+            const idCoincidencia = notificacion.idReporteCoincidencia ?? notificacion.id_reporte_coincidencia;
+            const destino = idCoincidencia ?? idPropio;
+            const params = new URLSearchParams({ tipo: "COINCIDENCIA_POTENCIAL" });
+            if (idPropio && idCoincidencia) {
+                params.set("idReporteMio", String(idPropio));
+                const todasCoincidencias = notificaciones
+                    .filter(n =>
+                        n.tipo === "COINCIDENCIA_POTENCIAL" &&
+                        (n.idReporte ?? n.id_reporte) === idPropio &&
+                        (n.idReporteCoincidencia ?? n.id_reporte_coincidencia)
+                    )
+                    .map(n => String(n.idReporteCoincidencia ?? n.id_reporte_coincidencia));
+                if (todasCoincidencias.length > 1) {
+                    params.set("coincidencias", todasCoincidencias.join(","));
+                }
+            }
+            navigate(`/reportes/${destino}?${params.toString()}`);
+        } else {
+            const idReporte = notificacion.idReporte ?? notificacion.id_reporte;
+            navigate(`/reportes/${idReporte}`);
+        }
+    }
+
     if (!user) {
         return (
             <div className="h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 flex items-center justify-center px-4">
@@ -55,8 +86,8 @@ export default function NotificacionesPage() {
     }
 
     return (
-        <div className="h-full bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 pb-12 px-4">
-            <div className="mx-auto max-w-2xl">
+        <div className="min-h-screen bg-linear-to-b from-[#369467] via-[#1a412f] to-[#0a1a10] pt-20 pb-6 px-4">
+            <div className="mx-auto flex max-w-2xl flex-col">
 
                 {/* Encabezado */}
                 <div className="mb-6 flex items-center justify-between">
@@ -105,8 +136,9 @@ export default function NotificacionesPage() {
                 </div>
 
                 {/* Contenido */}
+                <div className="max-h-[calc(100vh-260px)] overflow-y-auto pr-2">
                 {loading ? (
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3 pb-4">
                         {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
                     </div>
                 ) : error ? (
@@ -134,11 +166,14 @@ export default function NotificacionesPage() {
                                 notificacion={n}
                                 onLeer={leerUna}
                                 onEliminar={eliminar}
+                                onClickCard={handleNotificacionClick}
                             />
                         ))}
                     </div>
                 )}
             </div>
+        </div>
+
         </div>
     );
 }

@@ -1,8 +1,8 @@
 import { getDistanceFromReference } from "../utils/distance";
-import { ubicacionCoord } from "../../map/services/ubicacionService";
+import { ubicacionCoord2 } from "../../map/services/ubicacionService";
 import { useEffect, useState } from "react";
+import PawIcon from "../../../shared/components/PawIcon";
 
-const SPECIES_EMOJI = { dog: "🐕", cat: "🐈", other: "🐾" };
 const SPECIES_BG = { dog: "bg-orange-50", cat: "bg-violet-50", other: "bg-sky-50" };
 
 
@@ -41,7 +41,7 @@ useEffect(() => {
       return;
     }
 
-    const place = await ubicacionCoord(
+    const place = await ubicacionCoord2(
       pet.latitud,
       pet.longitud,
       controller.signal
@@ -78,7 +78,7 @@ useEffect(() => {
             className="w-full h-full object-cover"
           />
         ) : (
-          <span className="text-5xl select-none">{SPECIES_EMOJI[pet.species] ?? "🐾"}</span>
+          <PawIcon size="large" />
         )}
 
         <span

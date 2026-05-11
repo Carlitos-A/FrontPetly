@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { ubicacionCoord2 } from "../../map/services/ubicacionService";
+import { data, useNavigate } from "react-router-dom";
+import { ubicacionCoord } from "../../map/services/ubicacionService";
+import PawIcon from "../../../shared/components/PawIcon"
 
-
-const SPECIES_EMOJI = { dog: "🐕", cat: "🐈", other: "🐾" };
 const REPORT_STYLES = {
   PERDIDA: "bg-red-500/20 text-red-300 border-red-400/30",
   ENCONTRADA: "bg-[#5DCAA5]/20 text-[#5DCAA5] border-[#5DCAA5]/30",
@@ -10,24 +10,15 @@ const REPORT_STYLES = {
 };
 
 export default function ReportDetail({ report, onBack }) {
-  if (!report) return null;
-
-  const imageUrl = report.photo || report.imagen_url;
-  const title =  report.name || report.tipoReporte || "Detalle del reporte";
-  const reportStyle = REPORT_STYLES[report.tipoReporte] || "bg-white/10 text-white/70 border-white/20";
-  const locationFallback = getReportLocationText(report);
-  
+  const navigate = useNavigate();
+  const locationFallback = report ? getReportLocationText(report) : "";
+  const initialTitle = report ? (report.name || report.tipoReporte || "Detalle del reporte") : "";
+  const [titulo, setTitulo] = useState(initialTitle);
   const [ubicacion, setUbicacion] = useState(locationFallback || "Cargando ubicación...");
 
   useEffect(() => {
+    if (!report) return;
     const controller = new AbortController();
-
-    function formatearDireccion(direccion) {
-      if (!direccion) return "Ubicación no disponible";
-
-      const partes = direccion.split(",");
-      return partes.slice(0, 2).join(",").trim();
-    }
 
     async function cargarUbicacion() {
       if (!hasCoordinates(report)) {
@@ -36,27 +27,25 @@ export default function ReportDetail({ report, onBack }) {
       }
 
       try {
-        const place = await ubicacionCoord2(
-          report.latitud,
-          report.longitud,
-          controller.signal
-        );
-
-        const formattedPlace = formatearDireccion(place);
-        setUbicacion(isMissingLocation(formattedPlace) ? locationFallback || formattedPlace : formattedPlace);
+        const place = await ubicacionCoord(report.latitud, report.longitud, controller.signal);
+        const partes = place ? place.split(",") : [];
+        const formattedPlace = partes.length > 0 ? partes.slice(0, 2).join(",").trim() : "";
+        const resolved = isMissingLocation(formattedPlace) ? locationFallback || formattedPlace : formattedPlace;
+        setUbicacion(resolved);
+        if (!isMissingLocation(formattedPlace)) setTitulo(formattedPlace);
       } catch {
         setUbicacion("Ubicación no disponible");
       }
     }
 
-
     cargarUbicacion();
-
     return () => controller.abort();
-  }, [report.latitud, report.longitud, locationFallback]);
+  }, [report?.latitud, report?.longitud, locationFallback]);
 
+  if (!report) return null;
 
-
+  const imageUrl = report.photo || report.imagen_url;
+  const reportStyle = REPORT_STYLES[report.tipoReporte] || "bg-white/10 text-white/70 border-white/20";
 
   return (
     <article className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl shadow-black/20 backdrop-blur-xl">
@@ -64,28 +53,36 @@ export default function ReportDetail({ report, onBack }) {
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex items-center gap-2 rounded-full border border-[#5DCAA5]/40 bg-[#5DCAA5]/10 px-3 py-1.5 text-sm font-semibold text-[#5DCAA5] transition hover:bg-[#5DCAA5]/20"
+          className="cursor-pointer inline-flex items-center gap-2 rounded-full border border-[#5DCAA5]/40 bg-[#5DCAA5]/10 px-3 py-1.5 text-sm font-semibold text-[#5DCAA5] transition hover:bg-[#5DCAA5]/20"
         >
-          <span aria-hidden="true">←</span>
           Volver a reportes
         </button>
 
-        <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${reportStyle}`}>
-          {report.tipoReporte || "Sin tipo"}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${reportStyle}`}>
+            {report.tipoReporte || "Sin tipo"}
+          </span>
+          <button
+            type="button"
+            onClick={() => navigate(`/reportes/${report.id}`, { state: { latitud: report.latitud, longitud: report.longitud } })}
+            className="cursor-pointer inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/70 transition hover:bg-white/20 hover:text-white"
+          >
+            Ver detalle completo
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-5 p-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0f2e1f]">
+        <div className="h-80 overflow-hidden rounded-2xl border border-white/10 bg-[#0f2e1f] sm:h-112 lg:h-full">
           {imageUrl ? (
             <img
               src={imageUrl}
-              alt={`Imagen del reporte ${title}`}
-              className="h-80 w-full object-cover sm:h-[28rem]"
+              alt={`Imagen del reporte ${titulo}`}
+              className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-80 w-full items-center justify-center sm:h-[28rem]">
-              <span className="text-8xl select-none">{SPECIES_EMOJI[report.species] ?? "🐾"}</span>
+            <div className="flex h-full w-full items-center justify-center">
+              <PawIcon size="large" />
             </div>
           )}
         </div>
@@ -95,7 +92,7 @@ export default function ReportDetail({ report, onBack }) {
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#5DCAA5]">
               Reporte seleccionado
             </p>
-            <h2 className="mt-2 text-2xl font-bold text-white">{title}</h2>
+            <h2 className="mt-2 text-2xl font-bold text-white">{titulo}</h2>
             <p className="mt-2 text-sm leading-6 text-white/60">
               {report.description || "Este reporte no tiene descripción registrada."}
             </p>
@@ -104,7 +101,6 @@ export default function ReportDetail({ report, onBack }) {
           <section className="rounded-2xl border border-white/10 bg-black/10 p-4">
             <h3 className="mb-3 text-sm font-semibold text-white">Datos de la mascota</h3>
             <div className="grid gap-3 sm:grid-cols-2">
-              <DetailItem label="Estado mascota" value={report.status} />
               <DetailItem label="Especie" value={report.species} />
               <DetailItem label="Raza" value={report.breed} />
               <DetailItem label="Color" value={report.color} />
@@ -119,7 +115,7 @@ export default function ReportDetail({ report, onBack }) {
             <div className="grid gap-3 sm:grid-cols-2">
               <DetailItem label="ID reporte" value={report.id} />
               <DetailItem label="Fecha" value={formatDate(report.fechaReporte)} />
-              <DetailItem label="Ubicacion" value={ubicacion} />
+              <DetailItem label="Ubicación" value={ubicacion} />
             </div>
           </section>
 
@@ -149,7 +145,6 @@ function getReportLocationText(report) {
 function hasCoordinates(report) {
   const latitude = Number(report.latitud);
   const longitude = Number(report.longitud);
-
   return Number.isFinite(latitude) && Number.isFinite(longitude);
 }
 
@@ -157,15 +152,9 @@ function isMissingLocation(value) {
   return !value || value === "Ubicación no informada" || value === "Ubicación no disponible";
 }
 
-
 function formatDate(date) {
   if (!date) return "Sin información";
-
   const parsedDate = new Date(date);
   if (Number.isNaN(parsedDate.getTime())) return date;
-
-  return new Intl.DateTimeFormat("es-CL", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(parsedDate);
+  return new Intl.DateTimeFormat("es-CL", { dateStyle: "medium", timeStyle: "short" }).format(parsedDate);
 }
