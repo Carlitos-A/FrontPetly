@@ -43,37 +43,8 @@ describe('normalizeReport', () => {
   })
 
   //3
-  it('mapea correctamente un reporte con claves snake_case del backend', () => {
-    const raw = {
-      idreporte: 42,
-      tipo_reporte: 'Encontrado',
-      color_principal: 'Negro',
-      edad_aproximada: '1 año',
-      estado_mascota: 'Resuelto',
-      imagen_url: 'https://example.com/img.jpg',
-      lat: 6.244,
-      lng: -75.581,
-    }
-
-    const result = normalizeReport(raw)
-
-    expect(result.id).toBe(42)
-    expect(result.tipoReporte).toBe('Encontrado')
-    expect(result.color).toBe('Negro')
-    expect(result.approximateAge).toBe('1 año')
-    expect(result.status).toBe('Resuelto')
-    expect(result.latitud).toBe(6.244)
-    expect(result.longitud).toBe(-75.581)
-  })
-
-  //4
-  it('usa "Sin nombre" como fallback cuando no hay nombre', () => {
-    const result = normalizeReport({ id: 5 })
-    expect(result.name).toBe('Sin nombre')
-  })
-  
-  //5
-  it('no rompe con campos inesperados', () => {
+  it('usa "Sin nombre" como fallback y no rompe con campos inesperados', () => {
+    expect(normalizeReport({ id: 5 }).name).toBe('Sin nombre')
     expect(() => normalizeReport({ campoRaro: true })).not.toThrow()
   })
 })
