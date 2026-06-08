@@ -34,7 +34,7 @@ export async function createReport(data, tipoReporte) {
 
 
 
-  const token = sessionStorage.getItem("token");
+  const token = sessionStorage.getItem("token") || localStorage.getItem("token");
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 13000);

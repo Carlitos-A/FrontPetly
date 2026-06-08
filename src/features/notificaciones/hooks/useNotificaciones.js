@@ -29,7 +29,7 @@ export function useNotificaciones() {
     const [filtro, setFiltro] = useState("todas");
 
     const cargar = useCallback(async () => {
-        const token = sessionStorage.getItem("token");
+        const token = sessionStorage.getItem("token") || localStorage.getItem("token");
         if (!token) {
             setNotificaciones([]);
             setLoading(false);
