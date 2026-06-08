@@ -4,7 +4,7 @@ const COINCIDENCIAS_BASE_URL =
     "http://localhost:8080";
 
 function bearerHeader() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return null;
     return { Authorization: `Bearer ${token}` };
 }
