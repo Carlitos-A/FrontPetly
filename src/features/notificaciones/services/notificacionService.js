@@ -6,7 +6,7 @@ const API_URLS = [
 ].filter((url, index, urls) => url && urls.indexOf(url) === index);
 
 function bearerHeader() {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return null;
     return { Authorization: `Bearer ${token}` };
 }
